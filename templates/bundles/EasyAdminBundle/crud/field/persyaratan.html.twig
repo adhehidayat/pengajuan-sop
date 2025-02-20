@@ -1,0 +1,48 @@
+{% block _Pengajuan_persyaratan_widget %}
+    <div class="content">
+        <input type="checkbox" class="read-more-check" id="read-more-check">
+        <p class="text"></p>
+        <label for="read-more-check" class="read-more-btn"></label>
+    </div>
+
+    <style>
+        .content {
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        .text {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            transition: all 0.5s ease;
+        }
+
+        .read-more-check {
+            display: none;
+        }
+
+        .read-more-check:checked ~ .text {
+            -webkit-line-clamp: unset;
+            overflow: visible;
+        }
+
+        .read-more-check:checked ~ .read-more-btn::after {
+            content: " Read Less";
+        }
+
+        .read-more-btn {
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .read-more-btn::after {
+            content: " Read More";
+        }
+    </style>
+{% endblock %}

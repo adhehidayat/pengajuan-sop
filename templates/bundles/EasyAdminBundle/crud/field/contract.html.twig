@@ -1,0 +1,16 @@
+{% block contract_number_row %}
+{% set ptsp = ea_crud_form.ea_field.customOptions.get('ptsp_value')%}
+<div class="col-12">
+    <div class="form-group">
+        <legend class="col-form-label required">Nomor</legend>
+        <div class="form-widget">
+            <div class="form-control">
+                <input aria-label="{{ form.date.vars.name }}" type="text" id="{{ form.date.vars.id }}" name="{{ form.date.vars.full_name }}" value="{{ form.date.vars.value }}" style="width: 5em; border: none" readonly> /
+                <input aria-label="{{ form.ptsp.vars.name }}" type="text" id="{{ form.ptsp.vars.id }}" name="{{ form.ptsp.vars.full_name }}" value="{{ ptsp | generate_number }}" style="width: 1.5em; border: none" readonly> /
+                <input aria-label="{{ form.layanan.vars.name }}" type="text" id="{{ form.layanan.vars.id }}" name="{{ form.layanan.vars.full_name }}" value="xx" style="width: 1.5em; border: none" readonly> /
+                <input aria-label="{{ form.count.vars.name }}" type="text" id="{{ form.count.vars.id }}" name="{{ form.count.vars.full_name }}" style="width: 2em; border: none" readonly>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
