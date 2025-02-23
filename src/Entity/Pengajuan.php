@@ -21,21 +21,14 @@ class Pengajuan implements RefLayananInterface
     #[ORM\Column(type: Types::BIGINT)]
     private string $contract;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nama = null;
+    #[ORM\Column]
+    private string $instansi;
 
-    #[ORM\Column(length: 25)]
-    private ?string $telepon = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $alamat = null;
+    #[ORM\ManyToOne]
+    private User $user;
 
     #[ORM\OneToMany(targetEntity: PengajuanAttachment::class, mappedBy: 'pengajuan', cascade: ["persist", "remove"], orphanRemoval: true)]
     private Collection|null $attachment = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\Email]
-    private ?string $email = null;
 
     #[ORM\ManyToOne]
     private RefLayanan $layanan;
@@ -43,21 +36,19 @@ class Pengajuan implements RefLayananInterface
     #[ORM\ManyToOne]
     private RefPtsp $ptsp;
 
+    /**
+     * @var Collection<int, PengajuanProgress>
+     */
+    #[ORM\OneToMany(targetEntity: PengajuanProgress::class, mappedBy: 'pengajuan')]
+    private Collection $progress;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createAt = null;
+
     public function __construct()
     {
         $this->attachment = new ArrayCollection();
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
+        $this->progress = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,42 +64,6 @@ class Pengajuan implements RefLayananInterface
     public function setContract(string $contract): static
     {
         $this->contract = $contract;
-
-        return $this;
-    }
-
-    public function getNama(): ?string
-    {
-        return $this->nama;
-    }
-
-    public function setNama(string $nama): static
-    {
-        $this->nama = $nama;
-
-        return $this;
-    }
-
-    public function getTelepon(): ?string
-    {
-        return $this->telepon;
-    }
-
-    public function setTelepon(string $telepon): static
-    {
-        $this->telepon = $telepon;
-
-        return $this;
-    }
-
-    public function getAlamat(): ?string
-    {
-        return $this->alamat;
-    }
-
-    public function setAlamat(string $alamat): static
-    {
-        $this->alamat = $alamat;
 
         return $this;
     }
@@ -168,6 +123,72 @@ class Pengajuan implements RefLayananInterface
                 $attachment->setPengajuan(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PengajuanProgress>
+     */
+    public function getProgress(): Collection
+    {
+        return $this->progress;
+    }
+
+    public function addProgress(PengajuanProgress $progress): static
+    {
+        if (!$this->progress->contains($progress)) {
+            $this->progress->add($progress);
+            $progress->setPengajuan($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProgress(PengajuanProgress $progress): static
+    {
+        if ($this->progress->removeElement($progress)) {
+            // set the owning side to null (unless already changed)
+            if ($progress->getPengajuan() === $this) {
+                $progress->setPengajuan(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInstansi(): ?string
+    {
+        return $this->instansi;
+    }
+
+    public function setInstansi(string $instansi): static
+    {
+        $this->instansi = $instansi;
+
+        return $this;
+    }
+
+    public function getCreateAt(): ?\DateTimeImmutable
+    {
+        return $this->createAt;
+    }
+
+    public function setCreateAt(\DateTimeImmutable $createAt): static
+    {
+        $this->createAt = $createAt;
 
         return $this;
     }

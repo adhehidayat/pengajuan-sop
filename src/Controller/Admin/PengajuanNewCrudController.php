@@ -67,10 +67,7 @@ class PengajuanNewCrudController extends AbstractCrudController
             FormField::addFieldset(propertySuffix: 'pengaduan'),
             ContractField::new('contract', 'Nomor')
                 ->setPtsp($ptsp_id),
-            TextField::new('nama', 'Nama Lengkap'),
-            TextField::new('email', 'Email'),
-            TelephoneField::new('telepon', 'Telepon'),
-            TextareaField::new('alamat', 'Alamat'),
+            TextField::new('instansi', 'Instansi'),
             CollectionField::new('attachment')
                 ->setEntryType(AttachmentType::class),
 
@@ -90,5 +87,4 @@ class PengajuanNewCrudController extends AbstractCrudController
                 ->setFormTypeOption('mapped', false)
         ];
     }
-
 }
