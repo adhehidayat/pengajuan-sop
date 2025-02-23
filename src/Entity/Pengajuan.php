@@ -18,7 +18,7 @@ class Pengajuan implements RefLayananInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::STRING)]
     private string $contract;
 
     #[ORM\Column]
@@ -28,7 +28,7 @@ class Pengajuan implements RefLayananInterface
     private User $user;
 
     #[ORM\OneToMany(targetEntity: PengajuanAttachment::class, mappedBy: 'pengajuan', cascade: ["persist", "remove"], orphanRemoval: true)]
-    private Collection|null $attachment = null;
+    private ?Collection $attachment;
 
     #[ORM\ManyToOne]
     private RefLayanan $layanan;
@@ -49,6 +49,7 @@ class Pengajuan implements RefLayananInterface
     {
         $this->attachment = new ArrayCollection();
         $this->progress = new ArrayCollection();
+        $this->createAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -113,6 +114,7 @@ class Pengajuan implements RefLayananInterface
     public function addAttachment(PengajuanAttachment $attachment): void
     {
         $this->attachment->add($attachment);
+        $attachment->setPengajuan($this);
     }
 
     public function removeAttachment(PengajuanAttachment $attachment): static

@@ -5,10 +5,14 @@ namespace App\Controller\Admin;
 use App\Admin\Fields\ContractField;
 use App\Entity\Pengajuan;
 use App\Form\AttachmentType;
+use App\Form\PengajuanAttachmentType;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -17,6 +21,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class PengajuanNewCrudController extends AbstractCrudController
@@ -69,7 +77,7 @@ class PengajuanNewCrudController extends AbstractCrudController
                 ->setPtsp($ptsp_id),
             TextField::new('instansi', 'Instansi'),
             CollectionField::new('attachment')
-                ->setEntryType(AttachmentType::class),
+                ->setEntryType(PengajuanAttachmentType::class),
 
             FormField::addColumn(4, propertySuffix: 'layanan'),
             FormField::addFieldset(propertySuffix: 'layanan'),
@@ -87,4 +95,5 @@ class PengajuanNewCrudController extends AbstractCrudController
                 ->setFormTypeOption('mapped', false)
         ];
     }
+
 }

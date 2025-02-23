@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\RefLayanan;
 use App\Entity\RefLayananAttachment;
 use App\Form\AttachmentType;
+use App\Form\RefLayananAttachmentType;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -53,7 +54,7 @@ class RefLayananCrudController extends AbstractCrudController
             FormField::addFieldset(propertySuffix: 'ptsp'),
             AssociationField::new('refPtsp', 'PTSP'),
             CollectionField::new('refLayananAttachments', 'Dokumen')
-                ->setEntryType(AttachmentType::class)
+                ->setEntryType(RefLayananAttachmentType::class)
                 ->setFormTypeOption('allow_add', true)
                 ->setFormTypeOption('by_reference', false)
                 ->onlyOnForms()

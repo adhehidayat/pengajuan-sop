@@ -16,11 +16,4 @@ class AttachmentType extends AbstractType
             ->add('file', VichFileType::class)
         ;
     }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => RefLayananAttachment::class
-        ]);
-    }
 }

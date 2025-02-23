@@ -6,6 +6,7 @@ use App\Repository\PengajuanAttachmentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -19,10 +20,10 @@ class PengajuanAttachment
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $file = null;
+    private ?string $files = null;
 
-    #[Vich\UploadableField(mapping: 'pengajuan_attachment', fileNameProperty: 'file')]
-    private UploadedFile $files;
+    #[Vich\UploadableField(mapping: 'pengajuan_attachment', fileNameProperty: 'files')]
+    private ?File $file;
 
     #[ORM\ManyToOne(targetEntity: Pengajuan::class, inversedBy: 'attachment')]
     private Pengajuan|null $pengajuan = null;
@@ -32,14 +33,14 @@ class PengajuanAttachment
         return $this->id;
     }
 
-    public function getFile(): ?string
+    public function getFiles(): ?string
     {
-        return $this->file;
+        return $this->files;
     }
 
-    public function setFile(string $file): static
+    public function setFiles(string $files): static
     {
-        $this->file = $file;
+        $this->files = $files;
 
         return $this;
     }
@@ -52,6 +53,18 @@ class PengajuanAttachment
     public function setPengajuan(?Pengajuan $pengajuan): static
     {
         $this->pengajuan = $pengajuan;
+
+        return $this;
+    }
+
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    public function setFile(?File $file): static
+    {
+        $this->file = $file;
 
         return $this;
     }
