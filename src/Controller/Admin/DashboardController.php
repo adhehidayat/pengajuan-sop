@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Pengajuan;
 use App\Entity\RefLayanan;
 use App\Entity\RefPtsp;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -43,6 +44,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Master');
         yield MenuItem::linkToCrud('PTSP', 'fa fa-tags', RefPtsp::class);
         yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class);
+
+        yield MenuItem::section('Administrator');
+        yield MenuItem::linkToCrud('User', 'fas fa-user', User::class);
 
         yield MenuItem::section('Content');
         yield MenuItem::linkToCrud('Pengajuan', 'fas fa-paper-plane',Pengajuan::class)
