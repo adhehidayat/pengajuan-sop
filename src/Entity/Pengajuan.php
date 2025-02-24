@@ -39,7 +39,7 @@ class Pengajuan implements RefLayananInterface
     /**
      * @var Collection<int, PengajuanProgress>
      */
-    #[ORM\OneToMany(targetEntity: PengajuanProgress::class, mappedBy: 'pengajuan')]
+    #[ORM\OneToMany(targetEntity: PengajuanProgress::class, mappedBy: 'pengajuan', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $progress;
 
     #[ORM\Column]
@@ -195,5 +195,12 @@ class Pengajuan implements RefLayananInterface
         return $this;
     }
 
+    public function getLastProgress(): ?string
+    {
+        if ($this->progress->last()) {
+            return $this->progress->last()->getStatus()->value;
+        }
 
+        return null;
+    }
 }

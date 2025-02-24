@@ -3,9 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Admin\Fields\ContractField;
+use App\Components\Enum\PengajuanStatusEnum;
 use App\Entity\Pengajuan;
+use App\Entity\PengajuanProgress;
+use App\Entity\User;
 use App\Form\AttachmentType;
 use App\Form\PengajuanAttachmentType;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -96,4 +100,19 @@ class PengajuanNewCrudController extends AbstractCrudController
         ];
     }
 
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $progress = new PengajuanProgress();
+        $progress->setStatus(PengajuanStatusEnum::DALAM_PROSES);
+        $progress->setCreateAt(new \DateTimeImmutable());
+
+        /** @var Pengajuan $pengajuan */
+        $pengajuan = $entityInstance;
+        $pengajuan->setUser($user);
+        $pengajuan->addProgress($progress);
+        parent::persistEntity($entityManager, $pengajuan);
+    }
 }

@@ -57,8 +57,8 @@ class UserCrudController extends AbstractCrudController
                 ])
                 ->onlyOnForms(),
             ChoiceField::new('roles', 'Roles')->setChoices([
-                "ROLE_ADMIN" => 'ADMIN',
-                "ROLE_OPERATOR" => 'OPERATOR'
+                "ADMIN" => 'ROLE_ADMIN',
+                "OPERATOR" => 'ROLE_OPERATOR'
             ])
             ->allowMultipleChoices()
         ];

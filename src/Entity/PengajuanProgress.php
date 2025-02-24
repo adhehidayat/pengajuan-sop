@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Components\Enum\PengajuanStatusEnum;
 use App\Repository\PengajuanProgressRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,13 +16,13 @@ class PengajuanProgress
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    #[ORM\Column(enumType: PengajuanStatusEnum::class)]
+    private ?PengajuanStatusEnum $status = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $user = null;
+    #[ORM\ManyToOne]
+    private ?User $user = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $ket;
 
     #[ORM\Column]
@@ -39,24 +41,24 @@ class PengajuanProgress
         return $this->id;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?PengajuanStatusEnum
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(?PengajuanStatusEnum $status): static
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getUser(): ?string
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(string $user): static
+    public function setUser(?User $user): static
     {
         $this->user = $user;
 
@@ -92,10 +94,28 @@ class PengajuanProgress
         return $this->ket;
     }
 
-    public function setKet(string $ket): static
+    public function setKet(?string $ket): static
     {
         $this->ket = $ket;
 
         return $this;
+    }
+
+    private ?array $attachmentPengajuan;
+
+    /**
+     * @return array|null
+     */
+    public function getAttachmentPengajuan(): ?array
+    {
+        return $this->attachmentPengajuan;
+    }
+
+    /**
+     * @param array|null $attachmentPengajuan
+     */
+    public function setAttachmentPengajuan(?array $attachmentPengajuan): void
+    {
+        $this->attachmentPengajuan = $attachmentPengajuan;
     }
 }
