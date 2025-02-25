@@ -15,10 +15,11 @@ class LabelField implements FieldInterface
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setTemplatePath('bundles/EasyAdminBundle/crud/field/label.html.twig')
+            ->addWebpackEncoreEntries('modalLabel')
             ;
     }
 
-    public function withModal()
+    public function withModal(): LabelField
     {
         return $this->setCustomOption('modal', true);
     }

@@ -7,7 +7,12 @@ use App\Components\Enum\PengajuanStatusEnum;
 use App\Entity\Pengajuan;
 use App\Entity\PengajuanProgress;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -17,11 +22,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class PengajuanProgressCrudController extends AbstractCrudController
 {
-    public function __construct(private readonly RequestStack $requestStack)
+    public function __construct(private readonly RequestStack $requestStack, private readonly AdminUrlGenerator $adminUrlGenerator)
     {
     }
 
@@ -30,10 +39,9 @@ class PengajuanProgressCrudController extends AbstractCrudController
         return PengajuanProgress::class;
     }
 
+
     public function configureFields(string $pageName): iterable
     {
-        $req = $this->requestStack;
-
         return [
             IdField::new('id')->hideOnForm(),
 
@@ -41,23 +49,20 @@ class PengajuanProgressCrudController extends AbstractCrudController
             FormField::addFieldset(propertySuffix: 'pengajuan'),
             TextField::new('pengajuan.contract', 'No. Registrasi')
                 ->setColumns(4)
-                ->setFormTypeOption('attr', ['required' => true, 'disabled' => true]),
+                ->setDisabled()
+                ->setVirtual(true),
             TextField::new('pengajuan.instansi', 'Instansi')
                 ->setColumns(8)
-                ->setFormTypeOption('attr', ['required' => true, 'disabled' => true]),
+                ->setDisabled()
+                ->setVirtual(true),
             TextField::new('pengajuan.user', 'Nama')
                 ->setColumns(8)
-                ->setFormTypeOption('attr', ['required' => true, 'disabled' => true]),
+                ->setDisabled()
+                ->setVirtual(true),
             TextField::new('pengajuan.user.nik', 'NIK')
                 ->setColumns(4)
-                ->setFormTypeOption('attr', ['required' => true, 'disabled' => true]),
-            CollectionField::new('attachmentPengajuan', 'Attachments'),
-//            ArrayField::new('attachmentPengajuan', 'Attachment')
-//                ->addFormTheme('bundles/EasyAdminBundle/crud/field/pengajuan_layanan_progress_attachment.html.twig')
-//                ->setFormTypeOption('mapped', false)
-//                ->formatValue(function ($value) {
-//                    dump($value);
-//                }),
+                ->setDisabled()
+                ->setVirtual(true),
             AttachmentViewField::new('attachmentPengajuan', 'Attachments'),
 
             FormField::addColumn(4, propertySuffix: 'progress'),
@@ -69,7 +74,11 @@ class PengajuanProgressCrudController extends AbstractCrudController
         ];
     }
 
-    public function createEntity(string $entityFqcn)
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function createEntity(string $entityFqcn): PengajuanProgress
     {
         $req = $this->requestStack->getCurrentRequest();
         $id = $req->get('pengajuan');
@@ -91,4 +100,14 @@ class PengajuanProgressCrudController extends AbstractCrudController
         return $parent;
     }
 
+    protected function getRedirectResponseAfterSave(AdminContext $context, string $action): RedirectResponse
+    {
+        $url = $this->adminUrlGenerator
+            ->setController(PengajuanCrudController::class)
+            ->setAction(Crud::PAGE_INDEX)
+            ->unset('pengajuan')
+            ->generateUrl();
+
+        return $this->redirect($url);
+    }
 }

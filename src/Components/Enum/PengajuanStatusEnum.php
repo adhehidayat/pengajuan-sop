@@ -23,9 +23,9 @@ enum PengajuanStatusEnum: string
     public static function toArray(): array
     {
         return [
-            self::DITERIMA->value => self::DITERIMA->name,
-            self::DITOLAK->value => self::DITOLAK->name,
-            self::PERLU_PERBAIKAN->value => self::PERLU_PERBAIKAN->name
+            self::DITERIMA->value => self::DITERIMA,
+            self::DITOLAK->value => self::DITOLAK,
+            self::PERLU_PERBAIKAN->value => self::PERLU_PERBAIKAN
         ];
     }
 }

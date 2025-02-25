@@ -1,8 +1,9 @@
 {% if field.customOptions.get('modal') %}
-    {% if field.value == 'Dalam Proses' or field.value == 'Diterima' %}
+
+    {% if field.value == 'Dalam Proses' %}
         <span class="badge badge-primary">{{ field.value }}</span>
         {% else %}
-            <a data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <a href="#" id="modalLabelBtn" data-bs-toggle="modal" data-bs-target="#modalLabel" data-url="{{ entity | url_modal }}">
                 <span class="badge badge-primary">{{ field.value }}</span>
             </a>
     {% endif %}
@@ -11,20 +12,24 @@
 {% endif %}
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalLabel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <div class="modal-header" style="padding-bottom: 0">
+                {#                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>#}
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist" style="border-bottom: none">
+                        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Document Pengajuan</button>
+                        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Verifikasi</button>
+                    </div>
+                </nav>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+
+
             </div>
         </div>
     </div>
 </div>
+

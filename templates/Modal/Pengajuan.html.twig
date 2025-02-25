@@ -1,0 +1,28 @@
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+        <ul>
+            {% for v in repository.attachment %}
+                <li><a href="{{ '/uploads/pengajuan_attachment/' ~ v.files }}" target="_blank">{{ v.files }}</a></li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="list-group" style="height: 400px;overflow-x: scroll">
+            {% for v in repository.progress | sort((a, b) => b.createAt <=> a.createAt) %}
+                <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5>{{ v.status.value }}</h5>
+                        <small>{{ v.createAt | date }}</small>
+                    </div>
+                    <p class="mb-1">{{ v.ket }}</p>
+                    <small>Verificator: {{ v.user }}</small>
+                </a>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+
+
