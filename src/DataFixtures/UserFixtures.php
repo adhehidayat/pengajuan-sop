@@ -49,7 +49,7 @@ class UserFixtures
         $user3->setEmail('admin3@admin.com');
         $user3->setAlamat('admin 3');
 
-        $manager->persist($user2);
+        $manager->persist($user3);
 
 
     }
