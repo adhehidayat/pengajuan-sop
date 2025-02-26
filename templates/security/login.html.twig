@@ -1,4 +1,4 @@
-{% extends '@EasyAdmin/page/login.html.twig' %}
+{% extends '@!EasyAdmin/page/login.html.twig' %}
 
 {% block login_form_wrapper %}
         <form method="post">
@@ -40,7 +40,7 @@
                    value="{{ csrf_token('authenticate') }}"
             >
             <div class="float-start">
-                <a class="btn btn-lg btn-secondary" href="#">
+                <a class="btn btn-lg btn-secondary" href="{{ path('app_register') }}">
                     Register
                 </a>
             </div>

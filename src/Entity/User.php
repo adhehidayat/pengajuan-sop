@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_NIK', fields: ['nik'])]
 #[UniqueEntity(fields: ['nik'], message: 'There is already an account with this nik')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this Email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -20,17 +21,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $nik = null;
 
     #[ORM\Column(length: 255)]
     private ?string $nama = null;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     #[Assert\Email]
     private string $email;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(length: 25, unique: true)]
     private ?string $telepon = null;
 
     #[ORM\Column(type: Types::TEXT)]
