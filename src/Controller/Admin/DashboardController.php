@@ -34,6 +34,8 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->setTitle('Kemeneg')
+            ->generateRelativeUrls()
+            ->disableUrlSignatures()
             ;
     }
 
@@ -58,6 +60,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Pengajuan', 'fas fa-paper-plane',Pengajuan::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setController(PengajuanCrudController::class)
-            ->setPermission('ROLE_OPERATOR');
+            ->setPermission('ROLE_USER');
     }
 }

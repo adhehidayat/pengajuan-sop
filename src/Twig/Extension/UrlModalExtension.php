@@ -24,7 +24,6 @@ class UrlModalExtension extends AbstractExtension
         $explode = explode('\\', $value->getFqcn());
         $entity = array_pop($explode);
 
-        dump($id);
         return "/modal/${entity}/${id}";
     }
 }

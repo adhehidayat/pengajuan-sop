@@ -25,7 +25,8 @@ enum PengajuanStatusEnum: string
         return [
             self::DITERIMA->value => self::DITERIMA,
             self::DITOLAK->value => self::DITOLAK,
-            self::PERLU_PERBAIKAN->value => self::PERLU_PERBAIKAN
+            self::PERLU_PERBAIKAN->value => self::PERLU_PERBAIKAN,
+            self::DALAM_PROSES->value => self::DALAM_PROSES
         ];
     }
 }
