@@ -56,7 +56,7 @@ class DashboardController extends AbstractDashboardController
             ->setPermission('ROLE_ADMIN')
             ;
 
-        yield MenuItem::section('Content');
+        yield MenuItem::section('Pengajuan');
         yield MenuItem::linkToCrud('Pengajuan', 'fas fa-paper-plane',Pengajuan::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setController(PengajuanCrudController::class)

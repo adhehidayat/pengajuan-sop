@@ -108,11 +108,12 @@ class PengajuanNewCrudController extends AbstractCrudController
         $progress = new PengajuanProgress();
         $progress->setStatus(PengajuanStatusEnum::DALAM_PROSES);
         $progress->setCreateAt(new \DateTimeImmutable());
-
+        $progress->setPengajuan($entityInstance);
         /** @var Pengajuan $pengajuan */
         $pengajuan = $entityInstance;
         $pengajuan->setUser($user);
-        $pengajuan->addProgress($progress);
+
+//        $pengajuan->addProgress($progress);
         parent::persistEntity($entityManager, $pengajuan);
     }
 }

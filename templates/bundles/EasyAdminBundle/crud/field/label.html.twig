@@ -1,14 +1,14 @@
 {% if field.customOptions.get('modal') %}
 
     {% if field.value == 'Dalam Proses' %}
-        <span class="badge badge-primary">{{ field.value }}</span>
+        <span class="badge badge-primary">{{ field.value.value }}</span>
         {% else %}
             <a href="#" id="modalLabelBtn" data-bs-toggle="modal" data-bs-target="#modalLabel" data-url="{{ entity | url_modal }}">
-                <span class="badge badge-primary">{{ field.value }}</span>
+                <span class="badge badge-primary">{{ field.value.value }}</span>
             </a>
     {% endif %}
     {% else %}
-        <span class="badge badge-primary">{{ field.value }}</span>
+        <span class="badge badge-primary">{{ field.value.value }}</span>
 {% endif %}
 
 <!-- Modal -->
@@ -16,7 +16,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header" style="padding-bottom: 0">
-                {#                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>#}
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
                 <nav>
                     <div class="nav nav-tabs" id="nav-tab" role="tablist" style="border-bottom: none">
                         <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Document Pengajuan</button>

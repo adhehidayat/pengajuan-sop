@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\PengajuanProgress;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,6 +16,14 @@ class PengajuanProgressRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PengajuanProgress::class);
+    }
+
+    public function subQuery(): QueryBuilder
+    {
+        return $this->createQueryBuilder('pp')
+            ->select('IDENTITY(pp.pengajuan)')
+            ->andWhere('pp.createAt = (SELECT MAX(pp2.createAt) FROM App\Entity\PengajuanProgress pp2 WHERE pp2.pengajuan = pp.pengajuan AND pp2.user = :user)')
+            ;
     }
 
     //    /**
