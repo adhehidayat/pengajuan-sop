@@ -1,0 +1,8 @@
+{% block attachment_view_widget %}
+    <ul>
+        {% for v in value %}
+            <li><a href="{{ '/uploads/pengajuan_attachment/' ~ v.files }}" target="_blank">{{ v.files }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

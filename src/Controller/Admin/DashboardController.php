@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Pengajuan;
 use App\Entity\RefLayanan;
 use App\Entity\RefPtsp;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -33,6 +34,8 @@ class DashboardController extends AbstractDashboardController
     {
         return Dashboard::new()
             ->setTitle('Kemeneg')
+            ->generateRelativeUrls()
+            ->disableUrlSignatures()
             ;
     }
 
@@ -40,13 +43,23 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
 
-        yield MenuItem::section('Master');
-        yield MenuItem::linkToCrud('PTSP', 'fa fa-tags', RefPtsp::class);
-        yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class);
+        yield MenuItem::section('Master')
+            ->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('PTSP', 'fa fa-tags', RefPtsp::class)
+            ->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class)
+            ->setPermission('ROLE_ADMIN');
+
+        yield MenuItem::section('Administrator')
+            ->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('User', 'fas fa-user', User::class)
+            ->setPermission('ROLE_ADMIN')
+            ;
 
         yield MenuItem::section('Content');
         yield MenuItem::linkToCrud('Pengajuan', 'fas fa-paper-plane',Pengajuan::class)
             ->setAction(Crud::PAGE_INDEX)
-            ->setController(PengajuanCrudController::class);
+            ->setController(PengajuanCrudController::class)
+            ->setPermission('ROLE_USER');
     }
 }

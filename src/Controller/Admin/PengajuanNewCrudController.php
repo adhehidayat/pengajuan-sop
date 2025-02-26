@@ -3,12 +3,20 @@
 namespace App\Controller\Admin;
 
 use App\Admin\Fields\ContractField;
+use App\Components\Enum\PengajuanStatusEnum;
 use App\Entity\Pengajuan;
+use App\Entity\PengajuanProgress;
+use App\Entity\User;
 use App\Form\AttachmentType;
+use App\Form\PengajuanAttachmentType;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -17,6 +25,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class PengajuanNewCrudController extends AbstractCrudController
@@ -67,12 +79,9 @@ class PengajuanNewCrudController extends AbstractCrudController
             FormField::addFieldset(propertySuffix: 'pengaduan'),
             ContractField::new('contract', 'Nomor')
                 ->setPtsp($ptsp_id),
-            TextField::new('nama', 'Nama Lengkap'),
-            TextField::new('email', 'Email'),
-            TelephoneField::new('telepon', 'Telepon'),
-            TextareaField::new('alamat', 'Alamat'),
+            TextField::new('instansi', 'Instansi'),
             CollectionField::new('attachment')
-                ->setEntryType(AttachmentType::class),
+                ->setEntryType(PengajuanAttachmentType::class),
 
             FormField::addColumn(4, propertySuffix: 'layanan'),
             FormField::addFieldset(propertySuffix: 'layanan'),
@@ -91,4 +100,19 @@ class PengajuanNewCrudController extends AbstractCrudController
         ];
     }
 
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $progress = new PengajuanProgress();
+        $progress->setStatus(PengajuanStatusEnum::DALAM_PROSES);
+        $progress->setCreateAt(new \DateTimeImmutable());
+
+        /** @var Pengajuan $pengajuan */
+        $pengajuan = $entityInstance;
+        $pengajuan->setUser($user);
+        $pengajuan->addProgress($progress);
+        parent::persistEntity($entityManager, $pengajuan);
+    }
 }
