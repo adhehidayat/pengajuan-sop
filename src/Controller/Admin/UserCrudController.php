@@ -60,7 +60,8 @@ class UserCrudController extends AbstractCrudController
                 "ADMIN" => 'ROLE_ADMIN',
                 "OPERATOR" => 'ROLE_OPERATOR'
             ])
-            ->allowMultipleChoices()
+                ->allowMultipleChoices()
+                ->formatValue(fn($value) => isset($value[0]) ? substr($value[0], 5) : "")
         ];
     }
 

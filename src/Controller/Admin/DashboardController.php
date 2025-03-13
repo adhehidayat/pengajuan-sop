@@ -47,8 +47,8 @@ class DashboardController extends AbstractDashboardController
             ->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('PTSP', 'fa fa-tags', RefPtsp::class)
             ->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class)
-            ->setPermission('ROLE_ADMIN');
+//        yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class)
+//            ->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Administrator')
             ->setPermission('ROLE_ADMIN');

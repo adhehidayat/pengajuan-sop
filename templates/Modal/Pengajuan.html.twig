@@ -10,7 +10,7 @@
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="list-group" style="height: 400px;overflow-x: scroll">
-            {% for v in repository.progress | sort((a, b) => b.createAt <=> a.createAt) %}
+            {% for v in history | sort((a, b) => b.createAt <=> a.createAt) %}
                 <a href="#" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
                         <h5>{{ v.status.value }}</h5>
@@ -20,7 +20,6 @@
                     <small>Verificator: {{ v.user }}</small>
                 </a>
             {% endfor %}
-
         </div>
     </div>
 </div>

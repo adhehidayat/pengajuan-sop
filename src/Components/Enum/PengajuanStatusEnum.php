@@ -2,6 +2,8 @@
 
 namespace App\Components\Enum;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 enum PengajuanStatusEnum: string
 {
     CASE DALAM_PROSES = 'Dalam Proses';
@@ -20,13 +22,14 @@ enum PengajuanStatusEnum: string
         };
     }
 
-    public static function toArray(): array
+    public static function toArray(): ArrayCollection
     {
-        return [
+
+        return new ArrayCollection([
             self::DITERIMA->value => self::DITERIMA,
             self::DITOLAK->value => self::DITOLAK,
             self::PERLU_PERBAIKAN->value => self::PERLU_PERBAIKAN,
             self::DALAM_PROSES->value => self::DALAM_PROSES
-        ];
+        ]);
     }
 }
