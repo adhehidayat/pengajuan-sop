@@ -4,6 +4,15 @@
 
     {{ block('page_content') }}
 
+    {% if 'ROLE_ADMIN' in app.user.roles %}
+    {% embed 'bundles/EasyAdminBundle/page/dashboard_components/_chart_admin.html.twig' %}
+        {% block content %}
+            {{ parent() }}
+        {% endblock %}
+    {% endembed %}
+    {% endif %}
+
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -142,5 +151,8 @@
             }
         }
     </style>
+
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 

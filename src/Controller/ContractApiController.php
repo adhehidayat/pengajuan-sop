@@ -24,7 +24,7 @@ class ContractApiController extends AbstractController
             throw new AccessDeniedHttpException('Invalid Token');
         }
 
-        $repository = $entity->getRepository(Pengajuan::class)->findTotalContract($contract);
+        $repository = $entity->getRepository(Pengajuan::class)->findTotalContractByTahun();
 
         return $this->json($repository);
     }

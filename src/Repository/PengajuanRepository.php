@@ -27,6 +27,23 @@ class PengajuanRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findTotalContractByTahun()
+    {
+
+        $date = new \DateTimeImmutable();
+        $start = $date->modify('first day of January');
+        $end = $date->modify('last day of December');
+
+        return $this->createQueryBuilder('u')
+            ->select(['count(u.id) as total'])
+            ->andWhere('u.createAt BETWEEN :start and :end')
+            ->setParameter('start', $start->format('Y-m-d H:i:s'))
+            ->setParameter('end', $end->format('Y-m-d H:i:s'))
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
     //    /**
     //     * @return Pengajuan[] Returns an array of Pengajuan objects
     //     */

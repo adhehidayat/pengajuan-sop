@@ -11,6 +11,9 @@ enum PengajuanStatusEnum: string
     CASE DITOLAK = 'Ditolak';
     CASE PERLU_PERBAIKAN = 'Perlu Perbaikan';
 
+    CASE PROSES_PERBAIKAN = 'Proses Perbaikan';
+    CASE PERBAIKAN_FIX = 'Perbaikan Selesai';
+
     public function level(): string
     {
         return match ($this) {
@@ -18,7 +21,6 @@ enum PengajuanStatusEnum: string
             self::DITERIMA => 1,
             self::PERLU_PERBAIKAN => 2,
             self::DITOLAK => 3,
-
         };
     }
 

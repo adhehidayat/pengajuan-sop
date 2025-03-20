@@ -6,6 +6,7 @@ use App\Entity\Pengajuan;
 use App\Entity\RefLayanan;
 use App\Entity\RefPtsp;
 use App\Entity\User;
+use App\Service\Chart\ChartPengajuanService;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -13,11 +14,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
-    public function __construct(private EntityManagerInterface $entity)
+    public function __construct(private EntityManagerInterface $entity, private ChartPengajuanService $chartPengajuan)
     {
     }
 
@@ -25,8 +28,13 @@ class DashboardController extends AbstractDashboardController
     {
         $groupPtsp = $this->entity->getRepository(RefLayanan::class)->findGroupPtsp();
 
+        $chartJumlahPengajuan = $this->chartPengajuan->chartPengaduanByStatus();
+
+
+
         return $this->render('bundles/EasyAdminBundle/page/Dashboard.html.twig', [
-            'group_ptsp' => $groupPtsp
+            'group_ptsp' => $groupPtsp,
+            'jumlahPengajuan' => $chartJumlahPengajuan
         ]);
     }
 
