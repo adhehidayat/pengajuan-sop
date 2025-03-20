@@ -126,10 +126,12 @@ class PengajuanCrudController extends AbstractCrudController
                             ])) {
                                 return false;
                             }
+
+                            return true;
                         }
 
                         
-                        return true;
+                        return false;
                     })
                     ;
             })
