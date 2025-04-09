@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PengajuanRepository::class)]
@@ -38,19 +39,16 @@ class Pengajuan implements RefLayananInterface
     #[ORM\ManyToOne]
     private RefPtsp $ptsp;
 
-    /**
-     * @var Collection<int, PengajuanProgress>
-     */
-    #[ORM\OneToMany(targetEntity: PengajuanProgress::class, mappedBy: 'pengajuan', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $progress;
-
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
+
+    #[ORM\OneToOne(inversedBy: 'pengajuan', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?PengajuanProgress $pengajuanProgress = null;
 
     public function __construct()
     {
         $this->attachment = new ArrayCollection();
-        $this->progress = new ArrayCollection();
         $this->createAt = new \DateTimeImmutable();
     }
 
@@ -143,36 +141,6 @@ class Pengajuan implements RefLayananInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, PengajuanProgress>
-     */
-    public function getProgress(): Collection
-    {
-        return $this->progress;
-    }
-
-    public function addProgress(PengajuanProgress $progress): static
-    {
-        if (!$this->progress->contains($progress)) {
-            $this->progress->add($progress);
-            $progress->setPengajuan($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProgress(PengajuanProgress $progress): static
-    {
-        if ($this->progress->removeElement($progress)) {
-            // set the owning side to null (unless already changed)
-            if ($progress->getPengajuan() === $this) {
-                $progress->setPengajuan(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getInstansi(): ?string
     {
         return $this->instansi;
@@ -197,12 +165,15 @@ class Pengajuan implements RefLayananInterface
         return $this;
     }
 
-    public function getLastProgress(): ?string
+    public function getPengajuanProgress(): ?PengajuanProgress
     {
-        if ($this->progress->last()) {
-            return $this->progress->last()->getStatus()->value;
-        }
+        return $this->pengajuanProgress;
+    }
 
-        return null;
+    public function setPengajuanProgress(PengajuanProgress $pengajuanProgress): static
+    {
+        $this->pengajuanProgress = $pengajuanProgress;
+
+        return $this;
     }
 }

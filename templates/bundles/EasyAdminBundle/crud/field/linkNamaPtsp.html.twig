@@ -1,0 +1,8 @@
+{% set url = ea_url()
+    .setController('App\\Controller\\Admin\\RefLayananCrudController')
+    .setAction('index')
+    .set('filters[ptsp][value]', entity.primaryKeyValue)
+    .generateUrl()
+%}
+
+<a href="{{ url }}">{{ field.value }}</a>

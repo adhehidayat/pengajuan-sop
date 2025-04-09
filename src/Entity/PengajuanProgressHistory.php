@@ -3,13 +3,11 @@
 namespace App\Entity;
 
 use App\Components\Enum\PengajuanStatusEnum;
-use App\Repository\PengajuanProgressRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PengajuanProgressRepository::class)]
-class PengajuanProgress
+#[ORM\Entity()]
+class PengajuanProgressHistory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,10 +21,13 @@ class PengajuanProgress
     private ?User $user = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $ket = null;
+    private ?string $ket;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'progress')]
+    private ?Pengajuan $pengajuan = null;
 
     public function __construct()
     {
@@ -74,6 +75,18 @@ class PengajuanProgress
         return $this;
     }
 
+    public function getPengajuan(): ?Pengajuan
+    {
+        return $this->pengajuan;
+    }
+
+    public function setPengajuan(?Pengajuan $pengajuan): static
+    {
+        $this->pengajuan = $pengajuan;
+
+        return $this;
+    }
+
     public function getKet(): ?string
     {
         return $this->ket;
@@ -87,9 +100,6 @@ class PengajuanProgress
     }
 
     private ?array $attachmentPengajuan;
-
-    #[ORM\OneToOne(mappedBy: 'pengajuanProgress', cascade: ['persist', 'remove'])]
-    private ?Pengajuan $pengajuan = null;
 
     /**
      * @return array|null
@@ -105,22 +115,5 @@ class PengajuanProgress
     public function setAttachmentPengajuan(?array $attachmentPengajuan): void
     {
         $this->attachmentPengajuan = $attachmentPengajuan;
-    }
-
-    public function getPengajuan(): ?Pengajuan
-    {
-        return $this->pengajuan;
-    }
-
-    public function setPengajuan(Pengajuan $pengajuan): static
-    {
-        // set the owning side of the relation if necessary
-        if ($pengajuan->getPengajuanProgress() !== $this) {
-            $pengajuan->setPengajuanProgress($this);
-        }
-
-        $this->pengajuan = $pengajuan;
-
-        return $this;
     }
 }

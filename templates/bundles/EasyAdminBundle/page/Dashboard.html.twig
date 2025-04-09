@@ -4,33 +4,44 @@
 
     {{ block('page_content') }}
 
+    {% if 'ROLE_ADMIN' in app.user.roles %}
+    {% embed 'bundles/EasyAdminBundle/page/dashboard_components/_chart_admin.html.twig' %}
+        {% block content %}
+            {{ parent() }}
+        {% endblock %}
+    {% endembed %}
+    {% endif %}
+
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                {% for ptsp in group_ptsp %}
+                {% if 'ROLE_USER' in app.user.roles %}
+                    {% for ptsp in group_ptsp %}
 
-                {% set url = ea_url()
-                    .setController('App\\Controller\\Admin\\PengajuanNewCrudController')
-                    .setAction('new')
-                    .set('filters[ptsp][value]', ptsp.nama)
-                    .set('filters[ptsp_id][value]', ptsp.id)
-                %}
+                        {% set url = ea_url()
+                            .setController('App\\Controller\\Admin\\PengajuanNewCrudController')
+                            .setAction('new')
+                            .set('filters[ptsp][value]', ptsp.nama)
+                            .set('filters[ptsp_id][value]', ptsp.id)
+                        %}
 
 
-                <div class="col-lg-3 col-6">
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>{{ ptsp.total }}</h3>
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>{{ ptsp.total }}</h3>
 
-                            <p>{{ ptsp.nama }}</p>
+                                    <p>{{ ptsp.nama }}</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                                <a href="{{ url }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a href="{{ url }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </section>
@@ -140,5 +151,8 @@
             }
         }
     </style>
+
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_script_tags('app') }}
 {% endblock %}
 

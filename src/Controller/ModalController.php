@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\PengajuanProgressHistory;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -21,13 +22,20 @@ class ModalController extends AbstractController
     public function index($entity, $id): Response
     {
         $repository = $this->managerRegistry
-            ->getManagerForClass("App\\Entity\\${entity}")
-            ->getRepository("App\\Entity\\${entity}")
+            ->getManagerForClass("App\\Entity\\{$entity}")
+            ->getRepository("App\\Entity\\{$entity}")
             ->find($id)
         ;
 
-        return $this->render("Modal/${entity}.html.twig", [
-            'repository' => $repository
+        $history =  $this->managerRegistry
+            ->getManagerForClass(PengajuanProgressHistory::class)
+            ->getRepository(PengajuanProgressHistory::class)
+            ->findBy(['pengajuan' => $repository->getId()])
+        ;
+
+        return $this->render("Modal/{$entity}.html.twig", [
+            'repository' => $repository,
+            'history' => $history
         ]);
     }
 }

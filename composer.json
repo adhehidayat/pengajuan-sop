@@ -25,6 +25,8 @@
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
         "symfony/serializer": "6.4.*",
+        "symfony/stimulus-bundle": "^2.23",
+        "symfony/ux-chartjs": "^2.23",
         "symfony/webpack-encore-bundle": "^2.2",
         "symfony/yaml": "6.4.*",
         "vich/uploader-bundle": "^2.5"
