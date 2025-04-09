@@ -22,8 +22,8 @@ class ModalController extends AbstractController
     public function index($entity, $id): Response
     {
         $repository = $this->managerRegistry
-            ->getManagerForClass("App\\Entity\\${entity}")
-            ->getRepository("App\\Entity\\${entity}")
+            ->getManagerForClass("App\\Entity\\{$entity}")
+            ->getRepository("App\\Entity\\{$entity}")
             ->find($id)
         ;
 
