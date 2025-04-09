@@ -1,58 +1,156 @@
 {% extends '@!EasyAdmin/page/login.html.twig' %}
 
 {% block login_form_wrapper %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            width: 100%;
+            background:rgb(11, 113, 215);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .menu {
+            display: flex;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            margin-top: 80px; /* Tambahan untuk menghindari navbar menutupi konten */
+        }
+
+        .login-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .login-container p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #004a99;
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: #004a99;
+            border: none;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #003a80;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            .login-container {
+                width: 90%;
+                max-width: 320px;
+            }
+        }
+    </style>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="{{ path('dashboard') }}">Dashboard</a>
+        <a href="{{ path('app_home') }}">Layanan Silincah</a>
+        <a href="{{ path('api_statistik') }}">Statistik</a>
+        <a href="{{ path('app_bantuan') }}">Bantuan</a>
+        <a href="{{ path('app_login') }}">Login</a>
+    </div>
+
+    <!-- Form Login -->
+    <div class="login-container">
+        <h3>Selamat Datang</h3>
+        <p>Silakan masuk ke akun Anda</p>
+
         <form method="post">
-            {% if error %}
+            {% if error is defined and error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
 
-            {% if app.user %}
-                <div class="mb-3">
-                    You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-                </div>
-            {% endif %}
+            <input type="text" id="username" name="{{ username_parameter|default('_username') }}" 
+                class="form-control" value="{{ last_username|default('') }}" required autofocus autocomplete="username" placeholder="NIK">
 
-            <div class="form-group">
-                <label class="form-control-label required" for="username">NIK</label>
-                <div class="form-widget">
-                    <input type="text" id="username" name="{{ username_parameter|default('_username') }}" class="form-control" value="{{ last_username|default('') }}" required autofocus autocomplete="username">
-                </div>
-            </div>
+            <input type="password" id="password" name="{{ password_parameter|default('_password') }}" 
+                class="form-control" required autocomplete="current-password" placeholder="Password">
 
-            <div class="form-group">
-                <label class="form-control-label required" for="password">{{ _password_label }}</label>
-                <div class="form-widget">
-                    <input type="password" id="password" name="{{ password_parameter|default('_password') }}" class="form-control" required autocomplete="current-password">
-                </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                {% if forgot_password_enabled|default(false) %}
-                    <div class="form-text">
-                        <a href="{{ forgot_password_path|default('#') }}">{{ _forgot_password_label }}</a>
-                    </div>
-                {% endif %}
-            </div>
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
-            <div class="float-start">
-                <a class="btn btn-lg btn-secondary" href="{{ path('app_register') }}">
-                    Register
-                </a>
-            </div>
-            <div class="float-end">
-                <button class="btn btn-lg btn-primary" type="submit">
-                    Sign in
-                </button>
-            </div>
-
-
+            <button class="btn-primary" type="submit" aria-label="Masuk ke akun">Masuk</button>
         </form>
+    </div>
 {% endblock %}
+
+
 
 {#{% extends '@EasyAdmin/page/content.html.twig' %}#}
 

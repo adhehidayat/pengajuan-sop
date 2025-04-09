@@ -33,7 +33,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Kemeneg')
+            ->setTitle('Admin SILINCAH')
             ->generateRelativeUrls()
             ->disableUrlSignatures()
             ;
@@ -53,8 +53,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Administrator')
             ->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('User', 'fas fa-user', User::class)
-            ->setPermission('ROLE_ADMIN')
-            ;
+            ->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Content');
         yield MenuItem::linkToCrud('Pengajuan', 'fas fa-paper-plane',Pengajuan::class)

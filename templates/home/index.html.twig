@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Layanan Kami{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <style>
+        .layanan-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        .layanan-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .layanan-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        .layanan-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+        .layanan-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .layanan-desc {
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .layanan-btn {
+            background: white;
+            color: #764ba2;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .layanan-btn:hover {
+            background: #764ba2;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4 text-uppercase fw-bold">Layanan Kami</h2>
+
+    <div class="layanan-container">
+        {% set layanan = [
+            {'nama': 'Bagian Tata Usaha', 'icon': 'fas fa-file-alt', 'deskripsi': 'Ajukan perizinan dengan mudah dan cepat.'},
+            {'nama': 'Pendidikan Madrasah', 'icon': 'fas fa-school', 'deskripsi': 'Layanan pendidikan madrasah dan kurikulum.'},
+            {'nama': 'Bimas Islam', 'icon': 'fas fa-balance-scale', 'deskripsi': 'Konsultasi hukum Islam.'},
+            {'nama': 'Haji dan Umrah', 'icon': 'fas fa-hajj', 'deskripsi': 'Pendaftaran dan pembinaan haji dan umrah.'},
+            {'nama': 'PAPKIS', 'icon': 'fas fa-ring', 'deskripsi': 'Daftarkan pernikahan secara online dengan mudah.'},
+            {'nama': 'Pembimas Kristen', 'icon': 'fas fa-cross', 'deskripsi': 'Pelayanan keagamaan Kristen.'},
+            {'nama': 'Pembimas Katolik', 'icon': 'fas fa-church', 'deskripsi': 'Layanan gereja dan kegiatan Katolik.'},
+            {'nama': 'Pembimas Hindu', 'icon': 'fas fa-om', 'deskripsi': 'Upacara keagamaan Hindu.'},
+            {'nama': 'Pembimas Buddha', 'icon': 'fas fa-dharmachakra', 'deskripsi': 'Bimbingan spiritual Buddha.'}
+        ] %}
+
+        {% for item in layanan %}
+            <div class="layanan-card">
+                <i class="{{ item.icon }} layanan-icon"></i>
+                <div class="layanan-title">{{ item.nama }}</div>
+                <p class="layanan-desc">{{ item.deskripsi }}</p>
+                <a href="{{ path('app_login') }}" class="layanan-btn">Pilih Layanan</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+ <!-- Grafik Chart -->
+    <div class="mt-5 text-center">
+        <h3>Statistik Layanan</h3>
+        <div style="max-width: 600px; margin: auto;">
+            <canvas id="layananChart"></canvas>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    var ctx = document.getElementById('layananChart').getContext('2d');
+    var layananChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Penerima Layanan', 'Terlayani', 'Dalam Proses', 'Layanan TMS'],
+            datasets: [{
+                label: 'Jumlah Layanan',
+                data: [200, 150, 30, 20],
+                backgroundColor: ['#42a5f5', '#66bb6a', '#ffa726', '#ef5350'],
+                borderColor: ['#1e88e5', '#388e3c', '#f57c00', '#d32f2f'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+});
+    </script>
+{% endblock %}
+
