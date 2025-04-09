@@ -33,7 +33,7 @@ class ModalController extends AbstractController
             ->findBy(['pengajuan' => $repository->getId()])
         ;
 
-        return $this->render("Modal/${entity}.html.twig", [
+        return $this->render("Modal/{$entity}.html.twig", [
             'repository' => $repository,
             'history' => $history
         ]);
