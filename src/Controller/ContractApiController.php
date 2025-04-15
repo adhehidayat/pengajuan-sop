@@ -18,7 +18,7 @@ class ContractApiController extends AbstractController
     public function getContract(EntityManagerInterface $entity, Request $request): Response
     {
         $contract = $request->get('contract');
-        $_token = $request->headers->get('auth_token');
+        $_token = $request->getSession()->get('_csrf/Pengajuan');
 
         if (!$this->isCsrfTokenValid('Pengajuan', $_token)) {
             throw new AccessDeniedHttpException('Invalid Token');

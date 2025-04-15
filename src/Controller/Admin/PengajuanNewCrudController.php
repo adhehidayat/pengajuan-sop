@@ -114,6 +114,7 @@ class PengajuanNewCrudController extends AbstractCrudController
         $pengajuan->setUser($user);
 
 //        $pengajuan->addProgress($progress);
+        // $pengajuan->setPengajuanProgress($progress);
         parent::persistEntity($entityManager, $pengajuan);
     }
 }

@@ -28,6 +28,8 @@ $(function () {
               ptsp: ptspId,
               layanan: value
             },
+            contentType : 'application/json',
+            dataType : 'json',
             headers: {
                 auth_token: _token.val()
             },

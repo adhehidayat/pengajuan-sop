@@ -20,7 +20,7 @@ class PersyaratanApiController extends AbstractController
     public function getPersyaratan(Request $request, EntityManagerInterface $entity, SerializerInterface $serializer): Response
     {
         $layanan = (int) $request->get('layanan');
-        $_token = $request->headers->get('auth_token');
+        $_token = $request->getSession()->get('_csrf/Pengajuan');
 
         if (!$this->isCsrfTokenValid('Pengajuan', $_token)) {
             throw new AccessDeniedHttpException('Invalid Token');
