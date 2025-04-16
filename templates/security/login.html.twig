@@ -104,11 +104,6 @@
         }
 
         @media (max-width: 768px) {
-            {# .navbar {
-                flex-direction: column;
-                align-items: center;
-                padding: 1rem;
-            } #}
 
             .login-container {
                 width: 90%;
@@ -125,27 +120,28 @@
         <a href="{{ path('app_bantuan') }}">Bantuan</a>
         <a href="{{ path('app_login') }}">Login</a>
     </div> #}
-
     <!-- Form Login -->
     <div class="d-flex justify-content-center align-items-center vh-100">
       <div class="login-container">
         <h3>Selamat Datang</h3>
-        <p>Silakan masuk ke akun Anda</p
-
-        <form method="post">
+        <p>Silakan masuk ke akun Anda</p>
+    
+        <form method="post" action="{{path('app_login')}}">
             {% if error is defined and error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
 
             <input type="text" id="username" name="{{ username_parameter|default('_username') }}" 
                 class="form-control" value="{{ last_username|default('') }}" required autofocus autocomplete="username" placeholder="NIK">
-
+            
             <input type="password" id="password" name="{{ password_parameter|default('_password') }}" 
                 class="form-control" required autocomplete="current-password" placeholder="Password">
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
+            {# <input type="submit" class="btn btn-primary" value="Masuk"> #}
             <button class="btn-primary" type="submit" aria-label="Masuk ke akun">Masuk</button>
+            
+
         </form>
     </div>
     </div>
