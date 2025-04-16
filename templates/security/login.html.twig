@@ -1,8 +1,8 @@
-{% extends '@!EasyAdmin/page/login.html.twig' %}
+{% extends 'base_template.html.twig' %}
 
-{% block login_form_wrapper %}
+{% block main %}
     <style>
-        * {
+       {# * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -10,14 +10,13 @@
         }
 
         body {
-            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #f8f9fa;
-        }
-
+        } #}
+  {#
         .navbar {
             width: 100%;
             background:rgb(11, 113, 215);
@@ -47,7 +46,7 @@
         .navbar a:hover {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 5px;
-        }
+        } #}
 
         .login-container {
             background: white;
@@ -105,11 +104,11 @@
         }
 
         @media (max-width: 768px) {
-            .navbar {
+            {# .navbar {
                 flex-direction: column;
                 align-items: center;
                 padding: 1rem;
-            }
+            } #}
 
             .login-container {
                 width: 90%;
@@ -119,18 +118,19 @@
     </style>
 
     <!-- Navbar -->
-    <div class="navbar">
+    {# <div class="navbar">
         <a href="{{ path('dashboard') }}">Dashboard</a>
         <a href="{{ path('app_home') }}">Layanan Silincah</a>
         <a href="{{ path('api_statistik') }}">Statistik</a>
         <a href="{{ path('app_bantuan') }}">Bantuan</a>
         <a href="{{ path('app_login') }}">Login</a>
-    </div>
+    </div> #}
 
     <!-- Form Login -->
-    <div class="login-container">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+      <div class="login-container">
         <h3>Selamat Datang</h3>
-        <p>Silakan masuk ke akun Anda</p>
+        <p>Silakan masuk ke akun Anda</p
 
         <form method="post">
             {% if error is defined and error %}
@@ -148,6 +148,8 @@
             <button class="btn-primary" type="submit" aria-label="Masuk ke akun">Masuk</button>
         </form>
     </div>
+    </div>
+  
 {% endblock %}
 
 

@@ -1,27 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_template.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
 
-    <style>
-        @media (min-width: 992px) {
-            body.page-login-custom {
-                align-items: center;
-                block-size: 100vh;
-                display: flex;
-                inline-size: 100vw;
-                justify-content: center;
-            }
-        }
-
-        body {
-            background: var(--bs-gray-100);
-        }
-    </style>
-{% endblock %}
-
-{% block body %}
-    <div class="login-wrapper"  style="margin-top: 5em!important;">
+{% block main %}
+<div class="d-flex justify-content-center align-items-center vh-100">
+<div class="login-wrapper"  style="margin-top: 5em!important;">
         <section class="content">
 
             {{ form_start(registrationForm) }}
@@ -88,5 +70,7 @@
             {{ form_end(registrationForm, {render_rest: false}) }}
         </section>
     </div>
+</div>
+    
 
 {% endblock %}
