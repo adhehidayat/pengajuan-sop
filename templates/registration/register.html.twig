@@ -1,76 +1,146 @@
 {% extends 'base_template.html.twig' %}
 
+{% block stylesheets %}
+	<style>
+		.login-container {
+			background: white;
+			padding: 2.5rem;
+			border-radius: 12px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+			width: 100%;
+			max-width: 680px;
+		}
 
+		.login-container h3 {
+			font-size: 1.5rem;
+			margin-bottom: 0.5rem;
+			color: #333;
+		}
+
+		.login-container p {
+			font-size: 0.9rem;
+			color: #666;
+			margin-bottom: 1.5rem;
+		}
+
+		.form-control {
+			width: 100%;
+			padding: 12px;
+			margin-bottom: 12px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			font-size: 1rem;
+			transition: border-color 0.3s;
+		}
+
+		.form-control:focus {
+			border-color: #004a99;
+			outline: none;
+		}
+
+		.btn-primary {
+			background-color: #004a99;
+			border: none;
+			color: white;
+			padding: 12px;
+			width: 100%;
+			border-radius: 6px;
+			font-size: 1rem;
+			font-weight: bold;
+			cursor: pointer;
+			transition: background 0.3s;
+		}
+
+		.btn-primary:hover {
+			background-color: #003a80;
+		}
+
+		@media(max-width: 768px) {
+
+
+			.login-container {
+				width: 90%;
+				max-width: 520px;
+			}
+		}
+	</style>
+{% endblock %}
 {% block main %}
-<div class="d-flex justify-content-center align-items-center vh-100">
-<div class="login-wrapper"  style="margin-top: 5em!important;">
-        <section class="content">
+	<div class="d-flex justify-content-center align-items-center vh-100">
 
-            {{ form_start(registrationForm) }}
-            <div class="form-group">
-                <label for="{{ registrationForm.nik.vars.id }}">NIK</label>
-                <div class="form-widget">
-                    <input aria-label="{{ registrationForm.nik.vars.id }}" class="form-control" name="{{ registrationForm.nik.vars.full_name }}">
-                </div>
-            </div>
 
-            <div class="row form-group">
-                <div class="col-6">
-                    <label for="{{ registrationForm.plainPassword.first.vars.id }}">Password</label>
-                    <div class="form-widget">
-                        <input aria-label="{{ registrationForm.plainPassword.first.vars.id }}" type="password" class="form-control" name="{{ registrationForm.plainPassword.first.vars.full_name }}">
-                    </div>
-                </div>
+		<div class="login-container">
+			<h3 class="text-center align-middle">Selamat Datang</h3>
+			<p class="text-center align-middle">Silakan masuk Registrasi Terlebih Dahulu</p>
 
-                <div class="col-6">
-                    <label for="{{ registrationForm.plainPassword.second.vars.id }}">Repeat Password</label>
-                    <div class="form-widget">
-                        <input aria-label="{{ registrationForm.plainPassword.second.vars.id }}" type="password" class="form-control" name="{{ registrationForm.plainPassword.second.vars.full_name }}">
-                    </div>
-                </div>
-            </div>
+			{{ form_start(registrationForm) }}
+			<div class="form-group">
+				<label for="{{ registrationForm.nik.vars.id }}">NIK</label>
+				<div class="form-widget">
+					<input aria-label="{{ registrationForm.nik.vars.id }}" class="form-control" name="{{ registrationForm.nik.vars.full_name }}">
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label for="{{ registrationForm.nama.vars.id }}">Nama</label>
-                <div class="form-widget">
-                    <input aria-label="{{ registrationForm.nama.vars.id }}" class="form-control" name="{{ registrationForm.nama.vars.full_name }}">
-                </div>
-            </div>
+			<div class="row form-group">
+				<div class="col-6">
+					<label for="{{ registrationForm.plainPassword.first.vars.id }}">Password</label>
+					<div class="form-widget">
+						<input aria-label="{{ registrationForm.plainPassword.first.vars.id }}" type="password" class="form-control" name="{{ registrationForm.plainPassword.first.vars.full_name }}">
+					</div>
+				</div>
 
-            <div class="form-group">
-                <label for="{{ registrationForm.email.vars.id }}">Email</label>
-                <div class="form-widget">
-                    <input aria-label="{{ registrationForm.email.vars.id }}" class="form-control" name="{{ registrationForm.email.vars.full_name }}">
-                </div>
-            </div>
+				<div class="col-6">
+					<label for="{{ registrationForm.plainPassword.second.vars.id }}">Repeat Password</label>
+					<div class="form-widget">
+						<input aria-label="{{ registrationForm.plainPassword.second.vars.id }}" type="password" class="form-control" name="{{ registrationForm.plainPassword.second.vars.full_name }}">
+					</div>
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label for="{{ registrationForm.telepon.vars.id }}">No. Handphone</label>
-                <div class="form-widget">
-                    <input aria-label="{{ registrationForm.telepon.vars.id }}" type="tel" class="form-control" name="{{ registrationForm.telepon.vars.full_name }}">
-                </div>
-            </div>
+			<div class="form-group">
+				<label for="{{ registrationForm.nama.vars.id }}">Nama</label>
+				<div class="form-widget">
+					<input aria-label="{{ registrationForm.nama.vars.id }}" class="form-control" name="{{ registrationForm.nama.vars.full_name }}">
+				</div>
+			</div>
 
-            <div class="form-group">
-                <label for="{{ registrationForm.alamat.vars.id }}">Alamat</label>
-                <div class="form-widget">
-                    <textarea class="form-control" name="{{ registrationForm.alamat.vars.full_name }}" aria-label="{{ registrationForm.alamat.vars.id }}"></textarea>
-                </div>
-            </div>
+			<div class="form-group">
+				<label for="{{ registrationForm.email.vars.id }}">Email</label>
+				<div class="form-widget">
+					<input aria-label="{{ registrationForm.email.vars.id }}" class="form-control" name="{{ registrationForm.email.vars.full_name }}">
+				</div>
+			</div>
 
-{#            <div class="form-group">#}
-{#                <input type="checkbox" class="form-check-input" id="{{ registrationForm.agreeTerms.vars.id }}" aria-label="{{ registrationForm.agreeTerms.vars.id }}" name="{{ registrationForm.agreeTerms.vars.full_name }}">#}
-{#                <label for="{{ registrationForm.agreeTerms.vars.id }}">Setuju</label>#}
-{#            </div>#}
+			<div class="form-group">
+				<label for="{{ registrationForm.telepon.vars.id }}">No. Handphone</label>
+				<div class="form-widget">
+					<input aria-label="{{ registrationForm.telepon.vars.id }}" type="tel" class="form-control" name="{{ registrationForm.telepon.vars.full_name }}">
+				</div>
+			</div>
 
-            {{ form_row(registrationForm._token) }}
-            <button type="submit" class="btn">Buat Akun</button>
-            {{ form_errors(registrationForm) }}
+			<div class="form-group">
+				<label for="{{ registrationForm.alamat.vars.id }}">Alamat</label>
+				<div class="form-widget">
+					<textarea class="form-control" name="{{ registrationForm.alamat.vars.full_name }}" aria-label="{{ registrationForm.alamat.vars.id }}"></textarea>
+				</div>
+			</div>
 
-            {{ form_end(registrationForm, {render_rest: false}) }}
-        </section>
-    </div>
-</div>
-    
+			{#            <div class="form-group">#}
+			{#                <input type="checkbox" class="form-check-input" id="{{ registrationForm.agreeTerms.vars.id }}" aria-label="{{ registrationForm.agreeTerms.vars.id }}" name="{{ registrationForm.agreeTerms.vars.full_name }}">#}
+			{#                <label for="{{ registrationForm.agreeTerms.vars.id }}">Setuju</label>#}
+			{#            </div>#}
+
+			{{ form_row(registrationForm._token) }}<button type="submit" class="btn btn-primary"> Buat Akun</button>
+			{{ form_errors(registrationForm) }}
+
+			{{ form_end(registrationForm, {render_rest: false}) }}
+		</div>
+
+
+		<div class="login-wrapper" style="margin-top: 5em!important;">
+			<section class="content"></section>
+		</div>
+	</div>
+
 
 {% endblock %}
