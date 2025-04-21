@@ -21,7 +21,7 @@ class RefPtsp
     #[Groups(['get_ref_layanan'])]
     private ?string $nama = null;
 
-    #[ORM\OneToMany(targetEntity: RefLayanan::class, mappedBy: 'refPtsp')]
+    #[ORM\OneToMany(targetEntity: RefLayanan::class, mappedBy: 'refPtsp', cascade: ["PERSIST", "REMOVE"])]
     private Collection $refLayanan;
 
     public function __toString(): string
