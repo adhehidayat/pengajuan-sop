@@ -11,6 +11,7 @@ use App\Entity\PengajuanProgress;
 use App\Entity\User;
 use App\Form\AttachmentType;
 use App\Form\PengajuanAttachmentType;
+use Doctrine\Common\Collections\Expr\Value;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
@@ -27,6 +28,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Provider\FieldProvider;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -122,7 +124,8 @@ class PengajuanCrudController extends AbstractCrudController
                                 PengajuanStatusEnum::PERLU_PERBAIKAN->value,
                                 PengajuanStatusEnum::PROSES_PERBAIKAN->value,
                                 PengajuanStatusEnum::DITOLAK->value,
-                                PengajuanStatusEnum::DITERIMA->value
+                                PengajuanStatusEnum::DITERIMA->value,
+                                PengajuanStatusEnum::PERBAIKAN_FIX
                             ])) {
                                 return false;
                             }
@@ -174,10 +177,9 @@ class PengajuanCrudController extends AbstractCrudController
                     FormField::addColumn(4, propertySuffix: 'progress'),
                     FormField::addFieldset(propertySuffix: 'progress'),
                     ChoiceField::new('pengajuanProgress.status', 'Status')
-                        ->setChoices(PengajuanStatusEnum::toArray()->toArray())
+                        ->setChoices(PengajuanStatusEnum::toArrayFixed()->toArray())
                         ->setFormTypeOption('placeholder', false)
-                        ->renderExpanded()
-                        ->setDisabled(),
+                        ->renderExpanded(),
                     TextareaField::new('pengajuanProgress.ket', 'Keterangan')
                         ->setDisabled()
                 ]);

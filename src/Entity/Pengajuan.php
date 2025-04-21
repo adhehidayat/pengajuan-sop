@@ -21,7 +21,6 @@ class Pengajuan implements RefLayananInterface
 
     #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
-    #[Assert\Legth(min, 3, max: 255)]
     private string $contract;
 
     #[ORM\Column]

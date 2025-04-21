@@ -34,4 +34,12 @@ enum PengajuanStatusEnum: string
             self::DALAM_PROSES->value => self::DALAM_PROSES
         ]);
     }
+
+    public static function toArrayFixed(): ArrayCollection
+    {
+
+        return new ArrayCollection([
+            self::PERBAIKAN_FIX->value => self::PERBAIKAN_FIX,
+        ]);
+    }
 }
