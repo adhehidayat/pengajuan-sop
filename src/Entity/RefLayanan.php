@@ -40,7 +40,7 @@ class RefLayanan
 
     public function __toString(): string
     {
-        return $this->nama;
+        return $this->nama ?? '';
     }
 
     public function __construct()

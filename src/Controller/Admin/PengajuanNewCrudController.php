@@ -111,7 +111,7 @@ class PengajuanNewCrudController extends AbstractCrudController
         $progress->setPengajuan($entityInstance);
         /** @var Pengajuan $pengajuan */
         $pengajuan = $entityInstance;
-        $pengajuan->setUser($user);
+//        $pengajuan->setUser($user);
 
 //        $pengajuan->addProgress($progress);
         // $pengajuan->setPengajuanProgress($progress);

@@ -12,6 +12,7 @@ class IndexController extends AbstractController
     #[Route(path: '/', name: 'app_frontend')]
     function index(Request $request)
     {
-        return $this->render('front_end/index.html.twig', []);
+//        return $this->render('front_end/index.html.twig', []);
+        return $this->redirect('/admin');
     }
 }

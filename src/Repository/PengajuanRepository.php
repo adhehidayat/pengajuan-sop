@@ -19,12 +19,22 @@ class PengajuanRepository extends ServiceEntityRepository
     public function findTotalContract($contract)
     {
         return $this->createQueryBuilder('u')
-            ->select('count(u.id) as total')
+            ->select('count(u.id) + 1 as total')
             ->andWhere('u.contract LIKE :contract')
             ->setParameter('contract', $contract . '%')
             ->getQuery()
             ->getSingleScalarResult()
             ;
+    }
+
+    public function findTotal($year)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('count(u.id) as total')
+            ->andWhere('SUBSTRING(u.contract, 1, 4) = :year')
+            ->setParameter('year', $year)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public function findTotalContractByTahun()
@@ -42,6 +52,15 @@ class PengajuanRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult()
             ;
+    }
+
+    public function create($instance, $flush = true): void
+    {
+        $this->getEntityManager()->persist($instance);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     //    /**

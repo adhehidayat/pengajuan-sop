@@ -21,12 +21,21 @@ class RefPtsp
     #[Groups(['get_ref_layanan'])]
     private ?string $nama = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $icon = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $color = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
+
     #[ORM\OneToMany(targetEntity: RefLayanan::class, mappedBy: 'refPtsp', cascade: ["PERSIST", "REMOVE"])]
     private Collection $refLayanan;
 
     public function __toString(): string
     {
-        return $this->nama;
+        return $this->nama ?? '';
     }
 
     public function __construct()
@@ -77,6 +86,42 @@ class RefPtsp
                 $refLayanan->setRefPtsp(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): static
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): static
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

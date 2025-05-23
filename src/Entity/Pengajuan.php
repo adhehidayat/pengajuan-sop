@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Interfaces\RefLayananInterface;
 use App\Repository\PengajuanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,11 +24,11 @@ class Pengajuan implements RefLayananInterface
     #[Assert\NotBlank]
     private string $contract;
 
-    #[ORM\Column]
-    private string $instansi;
+    #[ORM\Column(nullable: true)]
+    private ?string $instansi;
 
     #[ORM\ManyToOne]
-    private User $user;
+    private Narasumber $user;
 
     #[ORM\OneToMany(targetEntity: PengajuanAttachment::class, mappedBy: 'pengajuan', cascade: ["persist", "remove"], orphanRemoval: true)]
     private ?Collection $attachment;
@@ -128,12 +129,12 @@ class Pengajuan implements RefLayananInterface
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser(): ?Narasumber
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): static
+    public function setUser(?Narasumber $user): static
     {
         $this->user = $user;
 
@@ -145,7 +146,7 @@ class Pengajuan implements RefLayananInterface
         return $this->instansi;
     }
 
-    public function setInstansi(string $instansi): static
+    public function setInstansi(?string $instansi): static
     {
         $this->instansi = $instansi;
 

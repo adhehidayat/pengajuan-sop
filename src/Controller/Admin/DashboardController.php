@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Pengajuan;
+use App\Entity\RefJenisLayanan;
 use App\Entity\RefLayanan;
+use App\Entity\RefLayananInternal;
 use App\Entity\RefPtsp;
 use App\Entity\User;
 use App\Service\Chart\ChartPengajuanService;
@@ -57,6 +59,8 @@ class DashboardController extends AbstractDashboardController
             ->setPermission('ROLE_ADMIN');
 //        yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class)
 //            ->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Layanan Internal', '', RefLayananInternal::class);
+        yield MenuItem::linkToCrud('Layanan', '', RefJenisLayanan::class);
 
         yield MenuItem::section('Administrator')
             ->setPermission('ROLE_ADMIN');
