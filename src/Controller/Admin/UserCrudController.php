@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\KeyValueStore;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -58,10 +59,14 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             ChoiceField::new('roles', 'Roles')->setChoices([
                 "ADMIN" => 'ROLE_ADMIN',
-                "OPERATOR" => 'ROLE_OPERATOR'
+                "OPERATOR" => 'ROLE_OPERATOR',
+                "OPERATOR BIDANG" => 'ROLE_OPERATOR_BIDANG'
             ])
+                ->addWebpackEncoreEntries('userBidang')
                 ->allowMultipleChoices()
-                ->formatValue(fn($value) => isset($value[0]) ? substr($value[0], 5) : "")
+                ->formatValue(fn($value) => isset($value[0]) ? substr($value[0], 5) : ""),
+            AssociationField::new('ptsp', 'Bidang')
+                ->addFormTheme('bundles/EasyAdminBundle/crud/field/operator_bidang.html.twig')
         ];
     }
 

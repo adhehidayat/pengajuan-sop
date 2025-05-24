@@ -46,6 +46,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?RefPtsp $ptsp;
+
     public function __toString(): string
     {
         return $this->nama;
@@ -168,6 +172,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPtsp(): ?RefPtsp
+    {
+        return $this->ptsp;
+    }
+
+    public function setPtsp(?RefPtsp $ptsp): static
+    {
+        $this->ptsp = $ptsp;
 
         return $this;
     }

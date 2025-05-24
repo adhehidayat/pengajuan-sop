@@ -24,6 +24,7 @@ Encore
 
     .addEntry('contract', './assets/pengajuan/js/main.js')
     .addEntry('modalLabel', './assets/modal_field_label/modal.js')
+    .addEntry('userBidang', './assets/user/user_hidden_bidang.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
