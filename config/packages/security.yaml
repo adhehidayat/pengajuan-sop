@@ -42,7 +42,7 @@ security:
 
     role_hierarchy:
         ROLE_OPERATOR: ROLE_USER
-        ROLE_ADMIN: ROLE_OPERATOR
+        ROLE_ADMIN: [ROLE_OPERATOR, ROLE_OPERATOR_BIDANG]
         ROLE_SUPER_ADMIN: [ ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
 
 when@test:

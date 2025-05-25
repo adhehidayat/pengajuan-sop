@@ -59,8 +59,10 @@ class DashboardController extends AbstractDashboardController
             ->setPermission('ROLE_ADMIN');
 //        yield MenuItem::linkToCrud('Layanan', 'fa fa-cog', RefLayanan::class)
 //            ->setPermission('ROLE_ADMIN');
-        yield MenuItem::linkToCrud('Layanan Internal', '', RefLayananInternal::class);
-        yield MenuItem::linkToCrud('Layanan', '', RefJenisLayanan::class);
+        yield MenuItem::linkToCrud('Layanan Internal', '', RefLayananInternal::class)
+            ->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Layanan', '', RefJenisLayanan::class)
+            ->setPermission('ROLE_ADMIN');
 
         yield MenuItem::section('Administrator')
             ->setPermission('ROLE_ADMIN');
@@ -71,6 +73,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Pengajuan', 'fas fa-paper-plane',Pengajuan::class)
             ->setAction(Crud::PAGE_INDEX)
             ->setController(PengajuanCrudController::class)
-            ->setPermission('ROLE_USER');
+            ;
     }
 }

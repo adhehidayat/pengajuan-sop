@@ -2,18 +2,15 @@
 
 namespace App\Admin\Filters;
 
-use App\Components\Enum\PengajuanStatusEnum;
-use App\Entity\PengajuanProgress;
-use App\Form\ProgressFilterType;
 use Doctrine\ORM\QueryBuilder;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Filter\FilterInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\FilterDataDto;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\FilterTrait;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class ProgressFilter implements FilterInterface
+class   ProgressFilter implements FilterInterface
 {
     use FilterTrait;
 
@@ -23,7 +20,7 @@ class ProgressFilter implements FilterInterface
             ->setFilterFqcn(__CLASS__)
             ->setProperty($propertyName)
             ->setLabel($label)
-            ->setFormType(ProgressFilterType::class)
+            ->setFormType(ChoiceType::class)
             ;
     }
 
@@ -32,15 +29,22 @@ class ProgressFilter implements FilterInterface
         $alias = $filterDataDto->getEntityAlias();
         $value = $filterDataDto->getValue();
 
-        $subQuery = $queryBuilder->getEntityManager()->createQueryBuilder()
-            ->select('IDENTITY(pp.pengajuan)')
-            ->from(PengajuanProgress::class, 'pp')
-            ->where('pp.createAt = (SELECT MAX(pp2.createAt) FROM App\Entity\PengajuanProgress pp2 WHERE pp2.pengajuan = pp.pengajuan)')
-            ->andWhere('pp.status = :status')
-        ;
+        $queryBuilder
+            ->join('entity.pengajuanProgress' , 'pengajuanProgress')
+            ->andWhere('pengajuanProgress.status =:status')
+            ->setParameter('status', $value->value)
+            ;
 
-        $queryBuilder->andWhere($queryBuilder->expr()->in("$alias.id", $subQuery->getDQL()))
-            ->setParameter('status', $value->value);
+//
+//        $subQuery = $queryBuilder->getEntityManager()->createQueryBuilder()
+//            ->select('IDENTITY(pp.pengajuan)')
+//            ->from(PengajuanProgress::class, 'pp')
+//            ->where('pp.createAt = (SELECT MAX(pp2.createAt) FROM App\Entity\PengajuanProgress pp2 WHERE pp2.pengajuan = pp.pengajuan)')
+//            ->andWhere('pp.status = :status')
+//        ;
+//
+//        $queryBuilder->andWhere($queryBuilder->expr()->in("$alias.id", $subQuery->getDQL()))
+//            ->setParameter('status', $value->value);
     }
 
     public function renderExpanded(bool $isExpanded = true): self
@@ -57,9 +61,9 @@ class ProgressFilter implements FilterInterface
         return $this;
     }
 
-    public function setChoicesByRole($roles): self
+    public function choiceList(?array $choices): self
     {
-        $this->dto->setFormTypeOption('value_type_options.choices', $roles);
+        $this->dto->setFormTypeOption('choices', $choices);
 
         return $this;
     }

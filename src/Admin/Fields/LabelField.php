@@ -16,11 +16,17 @@ class LabelField implements FieldInterface
             ->setLabel($label)
             ->setTemplatePath('bundles/EasyAdminBundle/crud/field/label.html.twig')
             ->addWebpackEncoreEntries('modalLabel')
+            ->setCustomOption('color', null)
             ;
     }
 
     public function withModal(): LabelField
     {
         return $this->setCustomOption('modal', true);
+    }
+
+    public function withColor(array $color): LabelField
+    {
+        return $this->setCustomOption('color', $color);
     }
 }

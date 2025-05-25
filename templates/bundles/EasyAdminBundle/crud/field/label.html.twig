@@ -1,15 +1,25 @@
-{% if field.customOptions.get('modal') %}
+{#{% if field.customOptions.get('modal') %}#}
 
-    {% if field.value == 'Dalam Proses' %}
-        <span class="badge badge-primary">{{ field.value.value }}</span>
-        {% else %}
-            <a href="#" id="modalLabelBtn" data-bs-toggle="modal" data-bs-target="#modalLabel" data-url="{{ entity | url_modal }}">
-                <span class="badge badge-primary">{{ field.value.value }}</span>
-            </a>
-    {% endif %}
-    {% else %}
-        <span class="badge badge-primary">{{ field.value.value }}</span>
+{#    {% if field.value == 'Dalam Proses' %}#}
+{#        <span class="badge badge-primary">{{ field.value.value }}</span>#}
+{#        {% else %}#}
+{#            <a href="#" id="modalLabelBtn" data-bs-toggle="modal" data-bs-target="#modalLabel" data-url="{{ entity | url_modal }}">#}
+{#                <span class="badge badge-primary">{{ field.value.value }}</span>#}
+{#            </a>#}
+{#    {% endif %}#}
+{#    {% else %}#}
+{#        <span class="badge badge-primary">{{ field.value.value }}</span>#}
+{#{% endif %}#}
+
+{% set color = field.customOptions.get('color') %}
+
+
+{% if field.customOptions.get('modal') %}
+        <a href="#" id="modalLabelBtn" data-bs-toggle="modal" data-bs-target="#modalLabel" data-url="{{ entity | url_modal }}">
+            <span class="badge {{ "badge-" ~ color[field.value.value] }}">{{ field.value.value }}</span>
+        </a>
 {% endif %}
+
 
 <!-- Modal -->
 <div class="modal fade" id="modalLabel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
