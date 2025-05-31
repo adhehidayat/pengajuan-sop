@@ -25,8 +25,7 @@ class RefPtspCrudController extends AbstractCrudController
     {
         return $crud
             ->setEntityLabelInPlural('PTSP')
-            ->setEntityLabelInSingular('PTSP')
-            ;
+            ->setEntityLabelInSingular('PTSP');
     }
 
     public function configureFields(string $pageName): iterable
@@ -40,6 +39,7 @@ class RefPtspCrudController extends AbstractCrudController
             TextareaField::new('description'),
             CollectionField::new('refLayanan', 'Layanan')
                 ->setEntryType(RefLayananType::class)
+                ->hideOnForm()
         ];
     }
 }
