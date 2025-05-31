@@ -26,7 +26,7 @@ use function Symfony\Component\String\u;
 
 class UserCrudController extends AbstractCrudController
 {
-    public function __construct(private UserPasswordHasherInterface $hasher)
+    public function __construct(private readonly UserPasswordHasherInterface $hasher)
     {
     }
 
@@ -45,7 +45,7 @@ class UserCrudController extends AbstractCrudController
             TextField::new('nama', 'Nama Lengkap'),
             TextField::new('email', 'Email'),
             TelephoneField::new('telepon', 'Telepon'),
-            TextareaField::new('alamat', 'Alamat'),
+            TextareaField::new('alamat', 'Alamat')->hideOnIndex(),
 
             FormField::addColumn(4, propertySuffix: 'login'),
             FormField::addFieldset(propertySuffix: 'login'),
@@ -66,7 +66,8 @@ class UserCrudController extends AbstractCrudController
                 ->allowMultipleChoices()
                 ->formatValue(fn($value) => isset($value[0]) ? substr($value[0], 5) : ""),
             AssociationField::new('ptsp', 'Bidang')
-                ->addFormTheme('bundles/EasyAdminBundle/crud/field/operator_bidang.html.twig')
+//                ->addFormTheme('bundles/EasyAdminBundle/crud/field/operator_bidang.html.twig')
+                ->hideOnIndex()
         ];
     }
 
