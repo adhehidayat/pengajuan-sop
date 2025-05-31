@@ -19,3 +19,6 @@ yarn-error.log
 .idea
 .env
 /public/uploads
+/public/uploads/files
+/.idea
+/.phpactor.json
