@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Components\Enum\PengajuanStatusEnum;
 use App\Repository\PengajuanProgressRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +29,10 @@ class PengajuanProgress
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
 
+    #[ORM\OneToOne(mappedBy: 'pengajuanProgress', cascade: ['persist', 'remove'])]
+    private ?Pengajuan $pengajuan = null;
+
+
     public function __construct()
     {
         $this->createAt = new \DateTimeImmutable();
@@ -43,33 +48,9 @@ class PengajuanProgress
         return $this->status;
     }
 
-    public function setStatus(?PengajuanStatusEnum $status): static
+    public function setStatus(PengajuanStatusEnum $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getCreateAt(): ?\DateTimeImmutable
-    {
-        return $this->createAt;
-    }
-
-    public function setCreateAt(\DateTimeImmutable $createAt): static
-    {
-        $this->createAt = $createAt;
 
         return $this;
     }
@@ -86,25 +67,28 @@ class PengajuanProgress
         return $this;
     }
 
-    private ?array $attachmentPengajuan;
-
-    #[ORM\OneToOne(mappedBy: 'pengajuanProgress', cascade: ['persist', 'remove'])]
-    private ?Pengajuan $pengajuan = null;
-
-    /**
-     * @return array|null
-     */
-    public function getAttachmentPengajuan(): ?array
+    public function getCreateAt(): ?\DateTimeImmutable
     {
-        return $this->attachmentPengajuan;
+        return $this->createAt;
     }
 
-    /**
-     * @param array|null $attachmentPengajuan
-     */
-    public function setAttachmentPengajuan(?array $attachmentPengajuan): void
+    public function setCreateAt(\DateTimeImmutable $createAt): static
     {
-        $this->attachmentPengajuan = $attachmentPengajuan;
+        $this->createAt = $createAt;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getPengajuan(): ?Pengajuan
@@ -112,10 +96,15 @@ class PengajuanProgress
         return $this->pengajuan;
     }
 
-    public function setPengajuan(Pengajuan $pengajuan): static
+    public function setPengajuan(?Pengajuan $pengajuan): static
     {
+        // unset the owning side of the relation if necessary
+        if ($pengajuan === null && $this->pengajuan !== null) {
+            $this->pengajuan->setPengajuanProgress(null);
+        }
+
         // set the owning side of the relation if necessary
-        if ($pengajuan->getPengajuanProgress() !== $this) {
+        if ($pengajuan !== null && $pengajuan->getPengajuanProgress() !== $this) {
             $pengajuan->setPengajuanProgress($this);
         }
 
@@ -123,4 +112,5 @@ class PengajuanProgress
 
         return $this;
     }
+
 }

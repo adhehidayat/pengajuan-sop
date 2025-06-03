@@ -12,3 +12,7 @@ vich_uploader:
       upload_destination: '%kernel.project_dir%/public/uploads/pengajuan_attachment'
       namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
 
+    approved_bidang:
+      uri_prefix: /uploads/approved
+      upload_destination: '%kernel.project_dir%/public/uploads/approved'
+      namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

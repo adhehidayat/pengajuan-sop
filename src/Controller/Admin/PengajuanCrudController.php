@@ -7,10 +7,12 @@ use App\Admin\Fields\LabelField;
 use App\Admin\Filters\ProgressFilter;
 use App\Components\Enum\PengajuanStatusEnum;
 use App\Entity\Pengajuan;
+use App\Entity\PengajuanApprovedAttachments;
 use App\Entity\PengajuanProgress;
 use App\Entity\PengajuanProgressHistory;
 use App\Entity\User;
 use App\Form\AttachmentType;
+use App\Form\PengajuanApprovedAttachmentType;
 use App\Form\PengajuanAttachmentType;
 use Doctrine\Common\Collections\Expr\Value;
 use Doctrine\ORM\QueryBuilder;
@@ -53,16 +55,15 @@ class PengajuanCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
-                ->setPageTitle(Crud::PAGE_EDIT, function (Pengajuan $entity) {
-                    if ($entity->getUser()->getId() === $this->getUser()->getId()) {
-                        return 'Edit';
-                    }
+            ->setPageTitle(Crud::PAGE_EDIT, function (Pengajuan $entity) {
+                if ($entity->getUser()->getId() === $this->getUser()->getId()) {
+                    return 'Edit';
+                }
 
-                    return 'Verifikasi';
-                })
+                return 'Verifikasi';
+            })
             ->showEntityActionsInlined()
-            ->setDefaultSort(['id' => 'DESC'])
-            ;
+            ->setDefaultSort(['id' => 'DESC']);
     }
 
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
@@ -89,15 +90,14 @@ class PengajuanCrudController extends AbstractCrudController
 ////                ->setParameter('progress', $status->toArray());
 //            ;
 //        } else
-            if (in_array('ROLE_OPERATOR_BIDANG', $user->getRoles())) {
+        if (in_array('ROLE_OPERATOR_BIDANG', $user->getRoles())) {
             $status = PengajuanStatusEnum::toArray();
             $status->remove('Dalam Proses');
 
             return $parent
                 ->join('entity.ptsp', 'ptsp')
                 ->andWhere('ptsp.id = :ptsp')
-                ->setParameter('ptsp', $user->getPtsp()->getId())
-                ;
+                ->setParameter('ptsp', $user->getPtsp()->getId());
         }
 
         return $parent;
@@ -109,15 +109,14 @@ class PengajuanCrudController extends AbstractCrudController
             ->add(ProgressFilter::new('pengajuanProgress', 'Status')
                 ->renderExpanded()
                 ->choiceList(PengajuanStatusEnum::forChoices($this->getUser()->getRoles(), 'filter'))
-            )
-            ;
+            );
     }
 
     public function configureActions(Actions $actions): Actions
     {
         $firstOpenVerifikasi = Action::new('setVerifikasi', 'Verifikasi', 'fa fa-check')
             ->linkToCrudAction('firstVerifikasi')
-            ->displayIf(function(Pengajuan $pengajuan) {
+            ->displayIf(function (Pengajuan $pengajuan) {
                 if (in_array('ROLE_OPERATOR_BIDANG', $this->getUser()->getRoles())) {
                     return $pengajuan->getPengajuanProgress()->getStatus() === PengajuanStatusEnum::MENUNGGU;
                 }
@@ -128,8 +127,7 @@ class PengajuanCrudController extends AbstractCrudController
 
                 return false;
             })
-            ->setCssClass('btn btn-secondary')
-            ;
+            ->setCssClass('btn btn-secondary');
 
         return $actions
             ->disable(Crud::PAGE_NEW)
@@ -153,11 +151,8 @@ class PengajuanCrudController extends AbstractCrudController
                         $user = $this->getUser();
                         return PengajuanStatusEnum::isEditable($user->getRoles(), $pengajuan->getPengajuanProgress()->getStatus());
                     })
-                    ->setIcon('fa fa-check')
-                    ;
-            })
-
-            ;
+                    ->setIcon('fa fa-check');
+            });
     }
 
     public function configureFields(string $pageName): iterable
@@ -173,11 +168,6 @@ class PengajuanCrudController extends AbstractCrudController
                     ->setColumns(12)
                     ->setDisabled()
                     ->setVirtual(true),
-//                TextField::new('instansi', 'Instansi')
-//                    ->setColumns(8)
-//                    ->setDisabled()
-//                    ->setVirtual(true),
-//                AssociationField::new()
                 TextField::new('user.nik', 'NIK')
                     ->setColumns(4)
                     ->setDisabled()
@@ -186,41 +176,49 @@ class PengajuanCrudController extends AbstractCrudController
                     ->setColumns(8)
                     ->setDisabled()
                     ->setVirtual(true),
+                AttachmentViewField::new('attachment', 'Attachments'),
             ];
 
-
-            if (in_array('ROLE_USER', $user->getRoles())) {
+            if (in_array("ROLE_OPERATOR_BIDANG", $user->getRoles())) {
                 return array_merge($defaultForm, [
-                    CollectionField::new('attachment', 'Attachments')
-                        ->setEntryType(PengajuanAttachmentType::class),
-
                     FormField::addColumn(4, propertySuffix: 'progress'),
                     FormField::addFieldset(propertySuffix: 'progress'),
                     ChoiceField::new('pengajuanProgress.status', 'Status')
-                        ->setChoices(PengajuanStatusEnum::toArrayFixed()->toArray())
+                        ->setChoices(
+                            function (?Pengajuan $pengajuan) {
+                                return PengajuanStatusEnum::forFields($this->getUser()->getRoles(), $pengajuan->getPengajuanProgress()->getStatus());
+                            }
+                        )
                         ->setFormTypeOption('placeholder', false)
+                        ->setRequired(true)
+                        ->addWebpackEncoreEntries('pengajuan_approved_uploaded')
                         ->renderExpanded(),
+
+                    CollectionField::new('approvedAttachments', 'Approved File')
+                        ->setEntryType(PengajuanApprovedAttachmentType::class)
+                        ->setCssClass('approved_uploaded'),
                     TextareaField::new('pengajuanProgress.ket', 'Keterangan')
-                        ->setDisabled()
                 ]);
             }
 
-           return array_merge($defaultForm, [
-               AttachmentViewField::new('attachment', 'Attachments'),
+            return array_merge($defaultForm, [
+                FormField::addColumn(4, propertySuffix: 'progress'),
+                FormField::addFieldset(propertySuffix: 'progress'),
+                ChoiceField::new('pengajuanProgress.status', 'Status')
+                    ->setChoices(
+                        function (?Pengajuan $pengajuan) {
+                            return PengajuanStatusEnum::forFields($this->getUser()->getRoles(), $pengajuan->getPengajuanProgress()->getStatus());
+                        }
+                    )
+                    ->setFormTypeOption('placeholder', false)
+                    ->setRequired(true)
+                    ->addWebpackEncoreEntries('pengajuan_approved_uploaded')
+                    ->renderExpanded(),
 
-               FormField::addColumn(4, propertySuffix: 'progress'),
-               FormField::addFieldset(propertySuffix: 'progress'),
-               ChoiceField::new('pengajuanProgress.status', 'Status')
-                 ->setChoices(
-                       function (?Pengajuan $pengajuan) {
-                           return PengajuanStatusEnum::forFields($this->getUser()->getRoles(),$pengajuan->getPengajuanProgress()->getStatus());
-                       }
-                   )
-                   ->setFormTypeOption('placeholder', false)
-                   ->setRequired(true)
-                   ->renderExpanded(),
-               TextareaField::new('pengajuanProgress.ket', 'Keterangan')
-           ]);
+                AttachmentViewField::new('approvedAttachments', 'Attachments'),
+
+                TextareaField::new('pengajuanProgress.ket', 'Keterangan')
+            ]);
         }
 
 
@@ -287,8 +285,7 @@ class PengajuanCrudController extends AbstractCrudController
         $redirect = $this->urlGenerator
             ->setAction(Crud::PAGE_EDIT)
             ->setEntityId($entityId)
-            ->generateUrl()
-            ;
+            ->generateUrl();
 
         return $this->redirect($redirect);
     }

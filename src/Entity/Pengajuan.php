@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Interfaces\RefLayananInterface;
 use App\Repository\PengajuanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PengajuanRepository::class)]
@@ -30,7 +28,14 @@ class Pengajuan implements RefLayananInterface
     #[ORM\ManyToOne]
     private Narasumber $user;
 
-    #[ORM\OneToMany(targetEntity: PengajuanAttachment::class, mappedBy: 'pengajuan', cascade: ["persist", "remove"], orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            targetEntity: PengajuanAttachment::class,
+            mappedBy: "pengajuan",
+            cascade: ["persist", "remove"],
+            orphanRemoval: true
+        )
+    ]
     private ?Collection $attachment;
 
     #[ORM\ManyToOne]
@@ -42,14 +47,23 @@ class Pengajuan implements RefLayananInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $createAt = null;
 
-    #[ORM\OneToOne(inversedBy: 'pengajuan', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?PengajuanProgress $pengajuanProgress = null;
+    #[ORM\OneToOne(inversedBy: "pengajuan", cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?PengajuanProgress $pengajuanProgress;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Survey $survey;
+
+    #[ORM\OneToMany(targetEntity: PengajuanApprovedAttachments::class, mappedBy: 'pengajuanAttachment', cascade: ["persist", "remove"], orphanRemoval: true)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Collection $approvedAttachments;
 
     public function __construct()
     {
         $this->attachment = new ArrayCollection();
         $this->createAt = new \DateTimeImmutable();
+        $this->approvedAttachments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -170,9 +184,53 @@ class Pengajuan implements RefLayananInterface
         return $this->pengajuanProgress;
     }
 
-    public function setPengajuanProgress(PengajuanProgress $pengajuanProgress): static
+    public function setPengajuanProgress(
+        PengajuanProgress $pengajuanProgress
+    ): static
     {
         $this->pengajuanProgress = $pengajuanProgress;
+
+        return $this;
+    }
+
+    public function getSurvey(): ?Survey
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(?Survey $survey): static
+    {
+        $this->survey = $survey;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PengajuanApprovedAttachments>
+     */
+    public function getApprovedAttachments(): Collection
+    {
+        return $this->approvedAttachments;
+    }
+
+    public function addApprovedAttachment(PengajuanApprovedAttachments $approvedAttachment): static
+    {
+        if (!$this->approvedAttachments->contains($approvedAttachment)) {
+            $this->approvedAttachments->add($approvedAttachment);
+            $approvedAttachment->setPengajuanAttachment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApprovedAttachment(PengajuanApprovedAttachments $approvedAttachment): static
+    {
+        if ($this->approvedAttachments->removeElement($approvedAttachment)) {
+            // set the owning side to null (unless already changed)
+            if ($approvedAttachment->getPengajuanAttachment() === $this) {
+                $approvedAttachment->setPengajuanAttachment(null);
+            }
+        }
 
         return $this;
     }

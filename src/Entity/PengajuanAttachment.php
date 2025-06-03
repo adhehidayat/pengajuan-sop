@@ -28,6 +28,11 @@ class PengajuanAttachment
     #[ORM\ManyToOne(targetEntity: Pengajuan::class, inversedBy: 'attachment')]
     private Pengajuan|null $pengajuan = null;
 
+    public function __toString(): string
+    {
+        return $this->files;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

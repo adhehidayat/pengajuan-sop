@@ -103,7 +103,7 @@ enum PengajuanStatusEnum: string
                 default => false
             },
             'ROLE_OPERATOR_BIDANG' => match ($status) {
-                self::DALAM_PROSES, => true,
+                self::DALAM_PROSES, self::PERBAIKAN_FIX => true,
                 default => false
             },
             default => false
@@ -142,7 +142,7 @@ enum PengajuanStatusEnum: string
             //success
             self::DITERIMA->value => "success",
             self::SUKSES->value => "success",
-            self::PERBAIKAN_FIX->value => "success" ,
+            self::PERBAIKAN_FIX->value => "success",
 
             // info
             self::DALAM_PROSES->value => "info",
