@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: 'layanan_group',
+            uriTemplate: '/public/layanan_group',
             output: Layanan::class,
             provider: LayananGroupProvider::class
         )

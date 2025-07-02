@@ -8,22 +8,29 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\NarasumberRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NarasumberRepository::class)]
 #[ApiResource]
 #[ApiFilter(SearchFilter::class, properties: ['nik' => 'start'])]
+#[UniqueEntity(fields: "nik", message: 'NIK Already Exist!!!')]
+#[UniqueEntity(fields: 'telepon', message: 'Telepon Already Exist!!!')]
 class Narasumber
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["pencarian_read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["pencarian_read"])]
     private ?string $nik = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["pencarian_read"])]
     private ?string $nama = null;
 
     #[ORM\Column(unique: true)]

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Dto\Model\NarasumberModel;
 use App\Entity\Pengajuan;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,8 +24,7 @@ class PengajuanRepository extends ServiceEntityRepository
             ->andWhere('u.contract LIKE :contract')
             ->setParameter('contract', $contract . '%')
             ->getQuery()
-            ->getSingleScalarResult()
-            ;
+            ->getSingleScalarResult();
     }
 
     public function findTotal($year)
@@ -50,8 +50,28 @@ class PengajuanRepository extends ServiceEntityRepository
             ->setParameter('start', $start->format('Y-m-d H:i:s'))
             ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->getQuery()
-            ->getSingleScalarResult()
-            ;
+            ->getSingleScalarResult();
+    }
+
+    public function findFilter($contract, $nik)
+    {
+        return $this->createQueryBuilder('u')
+            ->select(['u.id',
+                'u.contract',
+                sprintf("NEW %s(user.id, user.nik, user.nama) as narasumber", NarasumberModel::class),
+                'pengajuanProgress.status progress',
+                'approvedAttachments.files',
+                'u.survey'
+            ])
+            ->join('u.user', 'user')
+            ->leftJoin('u.pengajuanProgress', 'pengajuanProgress')
+            ->leftJoin('u.approvedAttachments', 'approvedAttachments')
+            ->andWhere('u.contract LIKE :contract')
+            ->orWhere('user.nik LIKE :nik')
+            ->setParameter('contract', $contract . '%')
+            ->setParameter('nik', $nik)
+            ->getQuery()
+            ->getResult();
     }
 
     public function create($instance, $flush = true): void

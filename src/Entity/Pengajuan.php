@@ -2,15 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Entity\Interfaces\RefLayananInterface;
 use App\Repository\PengajuanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PengajuanRepository::class)]
+#[GetCollection(
+    uriTemplate: 'public/pengajuans'
+)]
+#[ApiFilter(SearchFilter::class, properties: ['user.nik' => 'partial', 'contract' => 'partial'])]
 class Pengajuan implements RefLayananInterface
 {
     #[ORM\Id]
@@ -51,13 +60,12 @@ class Pengajuan implements RefLayananInterface
     #[ORM\JoinColumn(nullable: true)]
     private ?PengajuanProgress $pengajuanProgress;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Survey $survey;
-
     #[ORM\OneToMany(targetEntity: PengajuanApprovedAttachments::class, mappedBy: 'pengajuanAttachment', cascade: ["persist", "remove"], orphanRemoval: true)]
     #[ORM\JoinColumn(nullable: true)]
     private ?Collection $approvedAttachments;
+
+    #[ORM\Column]
+    private ?bool $survey = false;
 
     public function __construct()
     {
@@ -66,11 +74,13 @@ class Pengajuan implements RefLayananInterface
         $this->approvedAttachments = new ArrayCollection();
     }
 
+    #[Groups(["pencarian_read", 'ptsp_read'])]
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    #[Groups(["pencarian_read", 'ptsp_read'])]
     public function getContract(): ?string
     {
         return $this->contract;
@@ -95,6 +105,7 @@ class Pengajuan implements RefLayananInterface
         return $this;
     }
 
+    #[Groups(["pencarian_read", 'ptsp_read'])]
     public function getPtsp(): ?RefPtsp
     {
         return $this->ptsp;
@@ -193,18 +204,6 @@ class Pengajuan implements RefLayananInterface
         return $this;
     }
 
-    public function getSurvey(): ?Survey
-    {
-        return $this->survey;
-    }
-
-    public function setSurvey(?Survey $survey): static
-    {
-        $this->survey = $survey;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, PengajuanApprovedAttachments>
      */
@@ -231,6 +230,18 @@ class Pengajuan implements RefLayananInterface
                 $approvedAttachment->setPengajuanAttachment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isSurvey(): ?bool
+    {
+        return $this->survey;
+    }
+
+    public function setSurvey(bool $survey): static
+    {
+        $this->survey = $survey;
 
         return $this;
     }

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\EventListener;
 
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -7,14 +8,16 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SignedRequestListener
 {
-    public function __construct(private string $secret) {}
+    public function __construct(private string $secret)
+    {
+    }
 
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
 
         // lepas auth dlu untuk development
-        if (!str_starts_with($request->getPathInfo(), '/api/')) {
+        if (!str_starts_with($request->getPathInfo(), '/api/public')) {
             return;
         }
 

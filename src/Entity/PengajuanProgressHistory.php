@@ -5,8 +5,9 @@ namespace App\Entity;
 use App\Components\Enum\PengajuanStatusEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PengajuanProgressHistoryRepository;
 
-#[ORM\Entity()]
+#[ORM\Entity(repositoryClass: PengajuanProgressHistoryRepository::class)]
 class PengajuanProgressHistory
 {
     #[ORM\Id]

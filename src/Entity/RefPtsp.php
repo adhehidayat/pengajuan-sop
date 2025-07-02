@@ -14,11 +14,11 @@ class RefPtsp
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['get_ref_layanan'])]
+    #[Groups(['get_ref_layanan', 'ptsp_read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['get_ref_layanan'])]
+    #[Groups(['get_ref_layanan', 'ptsp_read'])]
     private ?string $nama = null;
 
     #[ORM\Column(length: 255)]

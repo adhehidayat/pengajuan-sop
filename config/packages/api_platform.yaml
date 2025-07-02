@@ -1,13 +1,13 @@
 api_platform:
-    title: Pengajuan Api
-    version: 1.0.0
-    defaults:
-        stateless: true
-        cache_headers:
-            vary: ['Content-Type', 'Authorization', 'Origin']
-    formats:
-        jsonld: ["application/ld+json"]
-#        jsonhal: ["application/hal+json"]
-#        jsonapi: ["application/vnd.api+json"]
-        json: ["application/json"]
-        multipart: [ 'multipart/form-data' ]
+  title: Pengajuan Api
+  version: 1.0.0
+  defaults:
+    stateless: true
+    cache_headers:
+      vary: [ 'Content-Type', 'Authorization', 'Origin' ]
+  formats:
+    jsonld: [ "application/ld+json" ]
+    #        jsonhal: ["application/hal+json"]
+    #        jsonapi: ["application/vnd.api+json"]
+    json: [ "application/json" ]
+    multipart: [ 'multipart/form-data' ]
