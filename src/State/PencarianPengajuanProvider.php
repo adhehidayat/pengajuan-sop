@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PartialPaginatorInterface;
 use ApiPlatform\State\ProviderInterface;
 use App\ApiResource\PencarianPengajuan;
+use App\Dto\Model\PencarianPengajuanModel;
 use App\Repository\PengajuanProgressHistoryRepository;
 use App\Repository\PengajuanRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -28,7 +29,7 @@ final class PencarianPengajuanProvider implements ProviderInterface
 
         $results = [];
         foreach ($repository as $repo) {
-            $new = new PencarianPengajuan();
+            $new = new PencarianPengajuanModel();
 
             $new->id = $repo['id'];
             $new->contract = $repo['contract'];

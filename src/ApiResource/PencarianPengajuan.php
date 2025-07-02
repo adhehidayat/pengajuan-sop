@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\QueryParameter;
 use App\Dto\Model\NarasumberModel;
+use App\Dto\Model\PencarianPengajuanModel;
 use App\Entity\Narasumber;
 use App\Entity\Pengajuan;
 use App\Entity\User;
@@ -21,6 +22,7 @@ use Symfony\Component\Uid\Uuid;
             uriTemplate: 'public/pencarian/pengajuans',
             paginationEnabled: false,
             normalizationContext: ["groups" => ["pencarian_read", 'ptsp_read']],
+            output: PencarianPengajuanModel::class,
             provider: PencarianPengajuanProvider::class,
             parameters: [
                 new QueryParameter(key: 'contract', filter: SearchFilter::class),
@@ -31,25 +33,5 @@ use Symfony\Component\Uid\Uuid;
 )]
 class PencarianPengajuan
 {
-    #[Groups("pencarian_read")]
-    public int $id;
-
-    #[Groups("pencarian_read")]
-    public string $contract;
-
-    #[Groups("pencarian_read")]
-    public $narasumber;
-
-    #[Groups("pencarian_read")]
-    public $progress;
-
-    #[Groups("pencarian_read")]
-    public $historyProgress;
-
-    #[Groups("pencarian_read")]
-    public $files;
-
-    #[Groups("pencarian_read")]
-    public bool $isSurvey;
 
 }

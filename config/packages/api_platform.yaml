@@ -4,7 +4,7 @@ api_platform:
   defaults:
     stateless: true
     cache_headers:
-      vary: [ 'Content-Type', 'Authorization', 'Origin' ]
+      vary: [ 'Content-Type', 'Authorization', 'Origin', 'X-TIMESTAMP', 'X-SIGNATURE' ]
   formats:
     jsonld: [ "application/ld+json" ]
     #        jsonhal: ["application/hal+json"]
