@@ -76,8 +76,8 @@ class DashboardController extends AbstractDashboardController
             RefJenisLayanan::class
         )->setPermission("ROLE_ADMIN");
 
-        yield MenuItem::linkToCrud("Survey", "fas fa-poll", Survey::class)
-            ->setPermission("ROLE_ADMIN");
+//        yield MenuItem::linkToCrud("Survey", "fas fa-poll", Survey::class)
+//            ->setPermission("ROLE_ADMIN");
 
         yield MenuItem::section("Administrator")->setPermission("ROLE_ADMIN");
         yield MenuItem::linkToCrud(
