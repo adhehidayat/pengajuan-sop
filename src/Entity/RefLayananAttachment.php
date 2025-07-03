@@ -31,7 +31,7 @@ class RefLayananAttachment
 
     public function __toString(): string
     {
-        return $this->files;
+        return $this->files ?? '';
     }
 
     public function getId(): ?int
