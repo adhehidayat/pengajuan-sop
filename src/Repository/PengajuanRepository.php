@@ -68,7 +68,7 @@ class PengajuanRepository extends ServiceEntityRepository
             ->leftJoin('u.approvedAttachments', 'approvedAttachments')
             ->andWhere('u.contract LIKE :contract')
             ->orWhere('user.nik LIKE :nik')
-            ->setParameter('contract', $contract . '%')
+            ->setParameter('contract', $contract)
             ->setParameter('nik', $nik)
             ->getQuery()
             ->getResult();

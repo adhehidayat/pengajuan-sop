@@ -3,76 +3,100 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Survey;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\SurveyRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Uid\Uuid;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Flex\Response;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SurveyCrudController extends AbstractCrudController
 {
-    public function __construct(
-        private readonly HttpClientInterface   $_httpClient,
-        private readonly ParameterBagInterface $params
-    )
-    {
-    }
-
     public static function getEntityFqcn(): string
     {
         return Survey::class;
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     */
+    public function configureActions(Actions $actions): Actions
+    {
+        return parent::configureActions($actions)
+            ->add(Crud::PAGE_INDEX, Action::new('downloadLaporan', 'Unduh Laporan', '')
+                ->linkToCrudAction('downloadLaporan')
+                ->createAsGlobalAction()
+            )
+            ->disable(Crud::PAGE_EDIT)
+            ->disable(Crud::PAGE_DETAIL)
+            ->disable(Crud::PAGE_NEW)
+            ->disable(Action::DELETE);
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new("id")->hideOnForm()->hideOnIndex(),
-            ChoiceField::new("survey", "Survey")
-                ->setChoices($this->apiSurvey())
-                ->addWebpackEncoreEntries('survey_title_field')
-                ->hideOnIndex()
-            ,
-            HiddenField::new('title'),
-            BooleanField::new("status", "Status"),
+            TextField::new('pengajuan.contract')->renderAsHtml(),
+            TextField::new('narasumber.nama', 'Responden')
         ];
     }
 
-    public function apiSurvey(): array
+    public function downloadLaporan(SurveyRepository $surveyRepository): StreamedResponse
     {
-        $api = $this->params->get("api")["survey"]["link"];
+        $template = $this->getParameter('kernel.project_dir') . '/public/templates/survey-template.xlsx';
+        $spreadSheet = IOFactory::load($template);
+        $sheet = $spreadSheet->getActiveSheet();
 
-        $response = $this->_httpClient->request("GET", "{$api}/public/surveys", [
-            "headers" => [
-                "accept" => "application/json",
-            ],
-        ]);
+        $repository = $surveyRepository->findAll();
 
-        $data = $response->toArray();
+        $sheet->calculateWorksheetDimension();
 
-        $choices = [];
-        foreach ($data as $d) {
-            $choices[$d["title"]] = $d["id"];
+        $row = 5;
+        $no = 1;
+        foreach ($repository as $item) {
+            $sheet->getStyle("B{$row}")
+                ->getNumberFormat()
+                ->setFormatCode(NumberFormat::FORMAT_NUMBER);
+
+            $sheet->getColumnDimension("B")
+                ->setAutoSize(true);
+
+            $sheet->getColumnDimension("C")
+                ->setAutoSize(true);
+
+            $sheet->setCellValue("A{$row}", $no++);
+            $sheet->setCellValueExplicit("B{$row}", $item->getNarasumber()->getNik(), DataType::TYPE_STRING);
+            $sheet->setCellValue("C{$row}", $item->getNarasumber()->getNama());
+            $sheet->setCellValue("D{$row}", $item->getQue1());
+            $sheet->setCellValue("E{$row}", $item->getQue2());
+            $sheet->setCellValue("F{$row}", $item->getQue3());
+            $sheet->setCellValue("G{$row}", $item->getQue4());
+            $sheet->setCellValue("H{$row}", $item->getQue5());
+            $sheet->setCellValue("I{$row}", $item->getQue6());
+            $sheet->setCellValue("J{$row}", $item->getQue7());
+            $sheet->setCellValue("K{$row}", $item->getQue8());
+            $sheet->setCellValue("L{$row}", $item->getQue9());
+
+            $row++;
         }
 
-        return $choices;
-    }
 
+        $writer = IOFactory::createWriter($spreadSheet, 'Xlsx');
+
+        $response = new StreamedResponse(function () use ($writer) {
+            $writer->save('php://output');
+        });
+
+        $filename = 'laporan-' . date('Ymd') . '.xlsx';
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '"');
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+
+    }
 }

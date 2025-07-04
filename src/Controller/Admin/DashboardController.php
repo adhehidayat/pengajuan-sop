@@ -94,5 +94,8 @@ class DashboardController extends AbstractDashboardController
         )
             ->setAction(Crud::PAGE_INDEX)
             ->setController(PengajuanCrudController::class);
+
+        yield MenuItem::linkToCrud('Survey', 'fas fa-paper', Survey::class)
+            ->setPermission("ROLE_ADMIN");
     }
 }

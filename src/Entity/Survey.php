@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\Post;
 use App\Dto\Model\PencarianPengajuanModel;
 use App\Repository\SurveyRepository;
 use App\State\SurveyStateProcessor;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -57,6 +58,14 @@ class Survey
 
     #[ORM\Column]
     private int $que9;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $createAt;
+
+    public function __construct()
+    {
+        $this->createAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?Uuid
     {
@@ -195,4 +204,13 @@ class Survey
         return $this;
     }
 
+    public function getCreateAt(): ?\DateTimeImmutable
+    {
+        return $this->createAt;
+    }
+
+    public function setCreateAt(?\DateTimeImmutable $createAt): void
+    {
+        $this->createAt = $createAt;
+    }
 }

@@ -67,6 +67,11 @@ class Pengajuan implements RefLayananInterface
     #[ORM\Column]
     private ?bool $survey = false;
 
+    public function __toString(): string
+    {
+        return $this->contract;
+    }
+
     public function __construct()
     {
         $this->attachment = new ArrayCollection();
